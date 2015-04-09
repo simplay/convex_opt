@@ -7,9 +7,10 @@ clear all;
 close all;
 clc;
 
-iter = 1000;
+iter = 10000;
 FIND_OPTIMUM = false;
 im = imread('Input/fruits.png');
+im = imresize(im,2);
 [m,n,~] = size(im);
 im = im2double(im);
 
@@ -27,11 +28,14 @@ mosaiced = mat2Img(r,g,b);
 
 %% find best lambda
 if FIND_OPTIMUM
+    disp('starting finding best lambda');
     [ bestLambda ] = findBestLambda(im, mosaiced, Omega, 100 );
+    disp('determined best lambda value');
 else
     % determined using findBestLambda(...)
     % for Input/fruits.png at 200x266 pixels
-    bestLambda = 1899; 
+    % bestLambda = 1899;  % 1740 for big
+    bestLambda = 1740
 end
 
 %% compute demosaiced img

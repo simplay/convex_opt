@@ -46,7 +46,7 @@ function [u_next] = gradDescendStep(u, g, omega, lambda, alpha, eps)
 %
 % @param u current iterative solution of one particular color channel
 % @param g initial mosaiced image of color channel corresponding to given u.
-% @param Omega bayer filter mask M x N for a certain color channel
+% @param omega bayer filter mask M x N for a certain color channel
 % @param lambda [Float] regularization factor to control exactness of result and the smoothness 
 %        when solving the demosaicing convex minimization problem.
 % @param alpha learning rate for gradient descend.
