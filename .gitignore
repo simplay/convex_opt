@@ -1,1 +1,3 @@
 *.m~
+.texpadtmp/
+1/report/*.pdf
