@@ -35,7 +35,7 @@ else
     % determined using findBestLambda(...)
     % for Input/fruits.png at 200x266 pixels
     % bestLambda = 1899;  % 1740 for big
-    bestLambda = 1740
+    bestLambda = 1740;
 end
 
 %% compute demosaiced img

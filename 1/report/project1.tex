@@ -6,6 +6,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{color}
+\usepackage{mathtools}
 
 
 % load package with ``framed'' and ``numbered'' option.
@@ -29,13 +30,14 @@
    basicstyle=\small\ttfamily, 
 } 
 
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 
 
 \title{Assignment 1}
 
 
 
-\author{Name Surname\\Matriculation number}
+\author{Single Michael\\08-917-445}
 % //////////////////////////////////////////////////
 
 
@@ -55,10 +57,56 @@
 %\label{fig:performance}
 %\end{figure}
 
-\section*{Demosaicing}
+\section{Demosaicing}
+\subsection{Problem}
+Most digital cameras acquire images from an image sensor overlaid with a color filter array (CFA). A color filter array depicts a mosaic of RGB color filters applied in front of the image sensor. An example is illustrated in figure $FIGURE$. This implies that each pixel in a raw camera image stores only the measured color channel value that corresponds to its pxiel-position in the CFA.
+
+
+
+
+\subsection{Motivation}
+$\min_{u \in X} \norm{\nabla u}_1 + \frac{\lambda}{2} \norm{Du - g}^2_2$
+
+\subsection{Derivations}
+
+
+\begin{equation}
+	 \norm{\nabla{u_{c}}}_2 
+	= \sum_{i=1}^N \sum_{j=1}^M \sqrt{\left( u_{c}\left(i+1, j\right) - u_{c}\left(i,j\right) \right)^2}
+\end{equation}
+
+\begin{equation}
+	 \tau_{c}\left(i,j\right)
+	= \sqrt{\left( u_{c}\left(i+1, j\right) - u_{c}\left(i,j\right) \right)^2}
+\end{equation}
+
+\begin{equation}
+	\frac{\partial}{\partial u_{c}\left(i,j\right)} \norm{\nabla{u_c}}_2 = \frac{\partial{\tau_{c}\left(i,j\right)}}{\partial u_{c}\left(i,j\right)} + \frac{\partial{\tau_{c}\left(i-1,j\right)}}{\partial u_{c}\left(i,j\right)} + \frac{\partial{\tau_{c}\left(i,j-1\right)}}{\partial u_{c}\left(i,j\right)}
+\end{equation}
+
+\begin{align}
+	\frac{\partial{\tau_{c}\left(i,j\right)}}{\partial u_{c}\left(i,j\right)}
+	&= \frac{\partial}{\partial{u_{c}\left(i,j\right)}} \sqrt{ \left(u_{c}(i+1,j) - u_{c}(i,j)\right)^2 + \left(u_{c}(i,j+1) - u_{c}(i,j)\right)^2} \\
+	&= \frac{1}{2} \frac{2 (u_{c}(i+1,j)-u_{c}(i,j))(-1) + 2 (u_{c}(i,j+1)-u_{c}(i,j))(-1)}{\sqrt{ \left(u_{c}(i+1,j) - u_{c}(i,j)\right)^2 + \left(u_{c}(i,j+1) - u_{c}(i,j)\right)^2}} \\
+	&= \frac{1}{2} \frac{2 (-(u_{c}(i+1,j)-u_{c}(i,j)) - (u_{c}(i,j+1)-u_{c}(i,j))}{\tau_{c}\left(i,j\right)} \\
+	&= \frac{2 u_{c} \left(i,j\right) - u_{c} \left(i+1,j\right)-u_{c} \left(i,j+1\right)}{\tau_{c}\left(i,j\right)}
+\end{align}
+
+\begin{align}
+	\frac{\partial{\tau_{c}\left(i-1,j\right)}}{\partial u_{c}\left(i,j-1\right)}
+	&= \frac{\left(i,j\right)-u_{c} \left(i-1,j\right)}{\tau_{c}\left(i,j\right)}
+\end{align}
+
+\begin{align}
+	\frac{\partial{\tau_{c}\left(i,j-1\right)}}{\partial u_{c}\left(i,j\right)}
+	&= \frac{\left(i,j\right)-u_{c} \left(i,j-1\right)}{\tau_{c}\left(i,j\right)}
+\end{align}
+
+
 
 \begin{enumerate}
-\item \textbf{Problem.} Briefly describe the problem.
+\item \textbf{Problem.}
+
 \item \textbf{Motivations.} Describe the reasons and motivations behind this problem.
 \item \textbf{Derivation of gradient.} In this section you should:
 
