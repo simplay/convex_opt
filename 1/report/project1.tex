@@ -113,7 +113,9 @@ Next I will derive explicit expressions for the terms $\bf{(a)}$, $\bf{(b)}$ and
 \begin{align}
 (c) \Longrightarrow
 	& \frac{\partial{\tau_{c}\left(i,j-1\right)}}{\partial u_{c}\left(i,j\right)} \nonumber \\
-	&= \frac{\partial}{\partial{u_{c}\left(i,j\right)}} \sqrt{ \left(u_{c}(i,j)-u_{c}(i-1,j)\right)^2 + \left(u_{c}(i-1,j+1) - u_{c}(i-1,j)\right)^2} \nonumber \\	
+	&= \frac{\partial}{\partial{u_{c}\left(i,j\right)}} \sqrt{ \left(u_{c}(i,j)-u_{c}(i-1,j)\right)^2 + \left(u_{c}(i-1,j+1) - u_{c}(i-1,j)\right)^2} \nonumber \\
+	&=  \frac{1}{2} \frac{2 [\left(u_{c}(i,j)-u_{c}(i-1,j)\right)(1 + 0) + \left(u_{c}(i-1,j+1) - u_{c}(i-1,j)\right)(0+0)]}{\sqrt{ \left(u_{c}(i,j)-u_{c}(i-1,j)\right)^2 + \left(u_{c}(i-1,j+1) - u_{c}(i-1,j)\right)^2}} \nonumber \\
+	&= \frac{1}{2} \frac{2 \left(u_{c}(i,j)\right)-u_{c} \left(i,j-1\right)}{\tau_{c}\left(i,j\right)} \nonumber \\			
 	&= \frac{\left(u_{c}(i,j)\right)-u_{c} \left(i,j-1\right)}{\tau_{c}\left(i,j\right)}
 \end{align}
 
