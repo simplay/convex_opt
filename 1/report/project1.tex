@@ -31,7 +31,7 @@
 } 
 
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
-
+\DeclareMathOperator*{\argmin}{arg\,min}
 
 \title{Assignment 1}
 
@@ -62,10 +62,20 @@
 Most digital cameras acquire images from an image sensor overlaid with a color filter array (CFA). A color filter array depicts a mosaic of RGB color filters applied in front of the image sensor. An example is illustrated in figure $FIGURE$. This implies that each pixel in a raw camera image stores only the measured color channel value that corresponds to its pxiel-position in the CFA.
 
 
-
-
 \subsection{Motivation}
-$\min_{u \in X} \norm{\nabla u}_1 + \frac{\lambda}{2} \norm{Du - g}^2_2$
+
+\begin{align}
+	\widetilde{u_R} = \argmin_{u_R} \norm{\nabla u_R}_2 + \frac{\lambda}{2} \norm{u_R - g}^2_{\Omega_{R}} \\
+	\widetilde{u_G} = \argmin_{u_G} \norm{\nabla u_G}_2 + \frac{\lambda}{2} \norm{u_G - g}^2_{\Omega_{G}}\\
+	\widetilde{u_B} = \argmin_{u_B} \norm{\nabla u_R}_2 + \frac{\lambda}{2} \norm{u_B - g}^2_{\Omega_{B}}		
+\end{align}
+
+
+\subsection{Gradient Descend}
+
+\begin{align}
+	u_{c}(i,j) = u_{c}(i,j) - \alpha \frac{\partial{E}}{\partial{u_{c} (i,j)}}(i,j)
+\end{align}
 
 \subsection{Derivations}
 
