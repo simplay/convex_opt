@@ -69,6 +69,10 @@ $\min_{u \in X} \norm{\nabla u}_1 + \frac{\lambda}{2} \norm{Du - g}^2_2$
 
 \subsection{Derivations}
 
+In this subsection we derive an explicit approximation for the the partial derivative of our energy term $E$ that can be numerically computed. Such an approximation is useful since we will need its expression later for our update rule to solve our demosaicing optimization problem. For the discretization we will relying on a forward difference scheme. In other by the end of this section we will have derived an discretization of the following expression $\frac{\partial{E}}{\partial{u_{c} (i,j)}}(i,j)$. \\
+
+% TODO: glue those two paragraphs somehow
+
 using a forward difference approximation scheme for the derivatives $\partial_{i} u_c$ and $\partial_{j} u_c$ respectively, we can derive the following expression for the regularization term:
 
 \begin{align}
