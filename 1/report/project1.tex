@@ -73,7 +73,7 @@ using a forward difference approximation scheme for the derivative, we get:
 
 \begin{equation}
 	 \norm{\nabla{u_{c}}}_2 
-	= \sum_{i=1}^N \sum_{j=1}^M \sqrt{\left( u_{c}\left(i+1, j\right) - u_{c}\left(i,j\right) \right)^2}
+	= \sum_{i=1}^N \sum_{j=1}^M \sqrt{\left[ u_{c}\left(i+1, j\right) - u_{c}\left(i,j\right) \right]^2 + \left[ u_{c}\left(i, j+1 \right) - u_{c}\left(i,j\right) \right]^2}
 \label{eq:regularization_expr}
 \end{equation}
 
@@ -81,7 +81,7 @@ In oder to simplify later derivation steps, let us introduce the helper function
 
 \begin{equation}
 	 \tau_{c}\left(i,j\right)
-	= \sqrt{\left( u_{c}\left(i+1, j\right) - u_{c}\left(i,j\right) \right)^2}
+	= \sqrt{\left[ u_{c}\left(i+1, j\right) - u_{c}\left(i,j\right) \right]^2 + \left[ u_{c}\left(i, j+1 \right) - u_{c}\left(i,j\right) \right]^2}
 \end{equation}
 
 We notice that $\tau$ is only the expression under the summation in the right hand side in equation $\ref{eq:regularization_expr}$. Next, let us take the partial derivative along $u_{c}(i,j)$ of $\norm{\nabla{u_{c}}}_2$. By fixing a index pair ($i$ $j$) and reordering the terms under the summation, we see that 
