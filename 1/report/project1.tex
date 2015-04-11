@@ -70,6 +70,13 @@ Most digital cameras acquire images from an image sensor overlaid with a color f
 	\widetilde{u_B} = \argmin_{u_B} \norm{\nabla u_R}_2 + \frac{\lambda}{2} \norm{u_B - g}^2_{\Omega_{B}}		
 \end{align}
 
+\begin{equation}
+	\norm{u_C - g}^2_{\Omega_{C}} = \sum_x \sum_y \Omega_{C}(x,y)\norm{u_{c}(x,y) - g(x,y)}^2
+\end{equation}
+
+\begin{align}
+	E(u_{c}) =  \norm{\nabla u_c}_2 + \frac{\lambda}{2} \norm{u_c - g}^2_{\Omega_{R}}
+\end{align}
 
 \subsection{Gradient Descend}
 
