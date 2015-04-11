@@ -69,13 +69,14 @@ $\min_{u \in X} \norm{\nabla u}_1 + \frac{\lambda}{2} \norm{Du - g}^2_2$
 
 \subsection{Derivations}
 
-using a forward difference approximation scheme for the derivative, we get:
+using a forward difference approximation scheme for the derivatives $\partial_{i} u_c$ and $\partial_{j} u_c$ respectively, we can derive the following expression for the regularization term:
 
-\begin{equation}
+\begin{align}
 	 \norm{\nabla{u_{c}}}_2 
-	= \sum_{i=1}^N \sum_{j=1}^M \sqrt{\left[ u_{c}\left(i+1, j\right) - u_{c}\left(i,j\right) \right]^2 + \left[ u_{c}\left(i, j+1 \right) - u_{c}\left(i,j\right) \right]^2}
+	&= \sum_{i=1}^N \sum_{j=1}^M \sqrt{[\partial_{i} u_c(i,j)]^2 + [\partial_{j} u_c(i,j)]^2} \nonumber \\ 
+	&= \sum_{i=1}^N \sum_{j=1}^M \sqrt{\left[ u_{c}\left(i+1, j\right) - u_{c}\left(i,j\right) \right]^2 + \left[ u_{c}\left(i, j+1 \right) - u_{c}\left(i,j\right) \right]^2}
 \label{eq:regularization_expr}
-\end{equation}
+\end{align}
 
 In oder to simplify later derivation steps, let us introduce the helper function $\tau$ defined as the following 
 
