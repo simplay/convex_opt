@@ -69,20 +69,29 @@ $\min_{u \in X} \norm{\nabla u}_1 + \frac{\lambda}{2} \norm{Du - g}^2_2$
 
 \subsection{Derivations}
 
+using a forward difference approximation scheme for the derivative, we get:
 
 \begin{equation}
 	 \norm{\nabla{u_{c}}}_2 
 	= \sum_{i=1}^N \sum_{j=1}^M \sqrt{\left( u_{c}\left(i+1, j\right) - u_{c}\left(i,j\right) \right)^2}
+\label{eq:regularization_expr}
 \end{equation}
+
+In oder to simplify later derivation steps, let us introduce the helper function $\tau$ defined as the following 
 
 \begin{equation}
 	 \tau_{c}\left(i,j\right)
 	= \sqrt{\left( u_{c}\left(i+1, j\right) - u_{c}\left(i,j\right) \right)^2}
 \end{equation}
 
+We notice that $\tau$ is only the expression under the summation in the right hand side in equation $\ref{eq:regularization_expr}$. Next, let us take the partial derivative along $u_{c}(i,j)$ of $\norm{\nabla{u_{c}}}_2$. By reordering the terms in the sum, we see that 
+
+
 \begin{equation}
 	\frac{\partial}{\partial u_{c}\left(i,j\right)} \norm{\nabla{u_c}}_2 = \frac{\partial{\tau_{c}\left(i,j\right)}}{\partial u_{c}\left(i,j\right)} + \frac{\partial{\tau_{c}\left(i-1,j\right)}}{\partial u_{c}\left(i,j\right)} + \frac{\partial{\tau_{c}\left(i,j-1\right)}}{\partial u_{c}\left(i,j\right)}
 \end{equation}
+
+Next I will derive explicit expressions for the terms (a), (b) and (c). Loosely speaking our goal is to get rid of the partial derivative operator. The mathematical key concept I will rely on is the chain rule for partial derivatives. More precisely we will make use of the fact that $\partial_{x}\sqrt{f(x)}$ is $\frac{\partial_{x} f(x)}{2 \sqrt{f(x)}}$.
 
 \begin{align}
 	\frac{\partial{\tau_{c}\left(i,j\right)}}{\partial u_{c}\left(i,j\right)}
@@ -102,6 +111,7 @@ $\min_{u \in X} \norm{\nabla u}_1 + \frac{\lambda}{2} \norm{Du - g}^2_2$
 
 \begin{align}
 	\frac{\partial{\tau_{c}\left(i,j-1\right)}}{\partial u_{c}\left(i,j\right)}
+	&= \frac{\partial}{\partial{u_{c}\left(i,j\right)}} \sqrt{ \left(u_{c}(i,j) - u_{c}(i-1,j)\right)^2 + \left(u_{c}(i-1,j+1) - u_{c}(i-1,j)\right)^2} \\	
 	&= \frac{\left(u_{c}(i,j)\right)-u_{c} \left(i,j-1\right)}{\tau_{c}\left(i,j\right)}
 \end{align}
 
