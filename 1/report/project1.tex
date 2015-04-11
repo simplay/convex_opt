@@ -84,14 +84,13 @@ In oder to simplify later derivation steps, let us introduce the helper function
 	= \sqrt{\left( u_{c}\left(i+1, j\right) - u_{c}\left(i,j\right) \right)^2}
 \end{equation}
 
-We notice that $\tau$ is only the expression under the summation in the right hand side in equation $\ref{eq:regularization_expr}$. Next, let us take the partial derivative along $u_{c}(i,j)$ of $\norm{\nabla{u_{c}}}_2$. By reordering the terms in the sum, we see that 
-
+We notice that $\tau$ is only the expression under the summation in the right hand side in equation $\ref{eq:regularization_expr}$. Next, let us take the partial derivative along $u_{c}(i,j)$ of $\norm{\nabla{u_{c}}}_2$. By fixing a index pair ($i$ $j$) and reordering the terms under the summation, we see that 
 
 \begin{equation}
-	\frac{\partial}{\partial u_{c}\left(i,j\right)} \norm{\nabla{u_c}}_2 = \frac{\partial{\tau_{c}\left(i,j\right)}}{\partial u_{c}\left(i,j\right)} + \frac{\partial{\tau_{c}\left(i-1,j\right)}}{\partial u_{c}\left(i,j\right)} + \frac{\partial{\tau_{c}\left(i,j-1\right)}}{\partial u_{c}\left(i,j\right)}
+	\frac{\partial}{\partial u_{c}\left(i,j\right)} \norm{\nabla{u_c}}_2 = \underbrace{\frac{\partial{\tau_{c}\left(i,j\right)}}{\partial u_{c}\left(i,j\right)}}_{\bf{(a)}} + \underbrace{\frac{\partial{\tau_{c}\left(i-1,j\right)}}{\partial u_{c}\left(i,j\right)}}_{\bf{(b)}} + \underbrace{\frac{\partial{\tau_{c}\left(i,j-1\right)}}{\partial u_{c}\left(i,j\right)}}_{\bf{(c)}}
 \end{equation}
 
-Next I will derive explicit expressions for the terms (a), (b) and (c). Loosely speaking our goal is to get rid of the partial derivative operator. The mathematical key concept I will rely on is the chain rule for partial derivatives. More precisely we will make use of the fact that $\partial_{x}\sqrt{f(x)}$ is $\frac{\partial_{x} f(x)}{2 \sqrt{f(x)}}$.
+Next I will derive explicit expressions for the terms $\bf{(a)}$, $\bf{(b)}$ and $\bf{(c)}$. Loosely speaking our goal is to get rid of the partial derivative operator. The mathematical key concept I will rely on is the chain rule for partial derivatives. More precisely we will make use of the fact that $\partial_{x}\sqrt{f(x)}$ is $\frac{\partial_{x} f(x)}{2 \sqrt{f(x)}}$.
 
 \begin{align}
 	\frac{\partial{\tau_{c}\left(i,j\right)}}{\partial u_{c}\left(i,j\right)}
