@@ -1,13 +1,25 @@
 function [ bestLambda ] = findBestLambda(im, mosaiced, Omega, iter )
-%FINDBESTLAMBDA Summary of this function goes here
-%   Detailed explanation goes here
+%FINDBESTLAMBDA finds best regularization parameter for solving
+% the demosaicing optimization problem. This script performs some kind of
+% bisection heuristics, i.e. it first finds the best lambda according to
+% some step size. Once retrieved an optimum lambda according to a certain 
+% step size, it searches the best lambda within the range [lambda-step,lambda+step]
+% such a bisection heuristic is sound since all relevant lambda values are
+% checked.
+%   @param im ground truth image
+%   @param mosaiced mosaiced image version of the given ground truth
+%   @param Omega Bayer filter tensort (image) of same resolution as as the
+%       given images (ground truth and demosaiced img).
+%   @param iter number of iterations that should be performed 
+%       for approximating the best lambda.
+%   @return bestLambda Float approximated regularization term for given mosaiced image. 
 
     stepSize = 5;
     error = zeros(1,420);
     parfor k=1:420,
         l = stepSize*k
-        abc = demosaic(mosaiced, Omega, l, iter);
-        ssd = (im-abc).^2;
+        current_demosaiced = demosaic(mosaiced, Omega, l, iter);
+        ssd = (im-current_demosaiced).^2;
         error(k) = sum(abs(ssd(:)));
     end
     
@@ -19,8 +31,8 @@ function [ bestLambda ] = findBestLambda(im, mosaiced, Omega, iter )
     error2 = zeros(1,2*stepSize);
     parfor k=1:2*stepSize,
         l = ind*stepSize-stepSize+k
-        abc = demosaic(mosaiced, Omega, l, iter);
-        ssd = (im-abc).^2;
+        current_demosaiced = demosaic(mosaiced, Omega, l, iter);
+        ssd = (im-current_demosaiced).^2;
         error2(k) = sum(abs(ssd(:)));
     end
     [~,ind2] = min(error2);
