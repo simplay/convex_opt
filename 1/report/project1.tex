@@ -285,9 +285,7 @@ There are different choices for defining Dirichlet BC. We could think of simply 
 
 The update uses the learning rate parameter $\alpha$. I used a pretty small value for it of $\alpha=0.001$. Using this value for alpha resulted in convergence of my results. Note that I determined this value by a try and error approach. The only free parameter left to be retrieved is hence the regularization term $\lambda$.
 
-In the next section I will demonstrate some results I get when using my demosaicing function for different $\lambda$ values. 
-
-% TODO Show some images, as the the gradient method progresses iteration by iteration. Display the initial and the final image and 3 more images in between.
+In my implementation I always use a fixed number of iterations. Figure $\ref{fig:different_iters_for_best_lambda}$ illustrated the results I get when using different numbers of total iterations for a fixed $\lambda$. We observe that using only 1000 iterations already leads to visually pleasant, good-looking results.
 
 \begin{figure}[h!]
 \begin{center}
@@ -299,14 +297,30 @@ In the next section I will demonstrate some results I get when using my demosaic
    \includegraphics[scale =0.23] {figures/fruits_l1740i10000Big}
    \label{fig:subfig122}
  }
-
+~
+  \subfigure[100 Iterations]{
+   \includegraphics[scale =0.16] {figures/fruits_l1740i100Big}
+   \label{fig:subfig1111}
+ }
+ \subfigure[500 Iterations]{
+   \includegraphics[scale =0.16] {figures/fruits_l1740i500Big}
+   \label{fig:subfig1222}
+ }
+  \subfigure[1000 Iterations]{
+   \includegraphics[scale =0.16] {figures/fruits_l1740i1000Big}
+   \label{fig:subfig1223}
+ }
 \end{center}
-\label{fig:different_iters_for_best_lambda}
 \caption{Different numbers of Iterations using the best possible $\lambda$ value. How this value can be obtained is described in the last section. We get a nice result when only performing 10000 Iterations using an $\alpha=0.0001$ and $\lambda = 1740$ for the fruits data set.}
+\label{fig:different_iters_for_best_lambda}
 \end{figure}
 
-\subsection{Experimenting with different $\lambda$ values}
+In the next section I will demonstrate some results I get when using my demosaicing function for different $\lambda$ values. 
 
+\subsection{Experimenting with different $\lambda$ values}
+In this section we will examine how the regularization term affects the resulting images. We will show results produced using a too large $\lambda$, a too small $\lambda$ and results using appropriate $\lambda$ values.
+
+For comparison figure $\ref{fig:input_and_ground_truth}$ shows our mosaiced input image and its ground truth version.
 
 \begin{figure}[h!]
 \begin{center}
@@ -320,8 +334,8 @@ In the next section I will demonstrate some results I get when using my demosaic
  }
 
 \end{center}
-\label{fig:input_and_ground_truth}
 \caption{Our given mosaiced input image and its reference ground truth.}
+\label{fig:input_and_ground_truth}
 \end{figure}
 
 
@@ -366,9 +380,8 @@ In the next section I will demonstrate some results I get when using my demosaic
    \label{fig:subfig9}
  }
 \end{center}
-
-\label{fig:many_different_lambda_values}
 \caption{Reconstructed demosaicing results when using different values for $\lambda$ when running 1000 iterations.}
+\label{fig:many_different_lambda_values}
 \end{figure}
 
 
