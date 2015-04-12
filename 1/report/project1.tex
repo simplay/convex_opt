@@ -189,6 +189,7 @@ In oder to simplify later derivation steps, let us introduce the helper function
 \begin{equation}
 	 \tau_{c}\left(i,j\right)
 	= \sqrt{\left[ u_{c}\left(i+1, j\right) - u_{c}\left(i,j\right) \right]^2 + \left[ u_{c}\left(i, j+1 \right) - u_{c}\left(i,j\right) \right]^2}
+\label{eq:tau_function}	
 \end{equation}
 
 We notice that $\tau$ is only the expression under the summation in the right hand side in equation $\ref{eq:regularization_expr}$. Next, let us take the partial derivative along $u_{c}(i,j)$ of $\norm{\nabla{u_{c}}}_2$. By fixing a index pair ($i$ $j$) and reordering the terms under the summation, we see that 
@@ -244,9 +245,7 @@ In the next section we will present the final update rule according to our last 
 
 \subsection{Implementation of Demosaicing}
 
-% write initial glue
-
-The resulting equation $\ref{eq:plugged_abc}$ is then plugged into equation $\ref{eq:part_deriv_e}$. This gives us our final update gradient descent update rule:
+In this section we explain how the convex demosaicing can be implemented using the gradient descend method. Since the problem is currently underconstrainted we also will have to choose some boundary condition. But first off, we formulate the final update gradient descend update rule by plugging the resulting equation $\ref{eq:plugged_abc}$ into equation $\ref{eq:part_deriv_e}$. Doing so we get the following final update rule:
 
 \begin{align}
 	u_{c} (i,j)
@@ -260,6 +259,10 @@ The resulting equation $\ref{eq:plugged_abc}$ is then plugged into equation $\re
 \label{eq:final_update_rule}
 \end{align}
 
+We only have to define a function that implements the final update rule from equation $\ref{eq:final_update_rule}$. This function is then evaluated for each given color channel. Assuming we have computed the approximations for all color channels, we only have to combine all intermediate results to an RGB image$\footnote{In Matlab this can be achieved by using the function reshape.}$.
+Note that our update rule uses the auxiliary function $\tau$ defined as in equation $\ref{eq:tau_function}$. Note that $\tau(i,j)$ queries the indices $(i+1)$ and $(j+1)$. Furthermore, our update rule uses the indices (i+1) and (j+1) for some of its $u_c$ terms. Hence, when plugging the index (i+1) into $\tau$, for example, then the index $u(i+2,j)$ will be accessed. Similarly, some terms in our update rule access the index (i-1). When plugging this index into $\tau$ the query $u_c(i-2, j)$ will be performed. Analogues, for the indices j. 
+
+This observation tells us, that we have to extend the images $g$ and $u$ by a 2 pixel width and height border. In other words, the images $u$, $g$ are extended by 2 pixels on the left, on the right, on top and on the bottom. This extension depicts our \emph{boundary condition} (BC). Defining a explicit BC will fully constraint our system and will finally allow us to solve the optimization problem. Note once chosen a particular BC and found an iterative solution, this introduced boundary can simply be truncated. This ensures the same dimensionality as we initially had.
 
 \subsection{Experimenting with different $\lambda$ values}
 \subsection{Optimal $\lambda$ value}
