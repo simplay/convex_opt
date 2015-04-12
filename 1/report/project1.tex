@@ -333,13 +333,14 @@ For comparison figure $\ref{fig:input_and_ground_truth}$ shows our mosaiced inpu
    \label{fig:subfig122}
  }
 
-The effect of the regularization term $\lambda$ can be observed in figure $\ref{fig:many_different_lambda_values}$. Figure $\ref{fig:three_different_lambda_values}$ shows its three most significant deviations. On the left a too small and on the right a too large $\lambda$ value. The center images uses an appropriate value for $\lambda$.
-
 \end{center}
 \caption{Our given mosaiced input image and its reference ground truth.}
 \label{fig:input_and_ground_truth}
 \end{figure}
 
+The effect of the regularization term $\lambda$ can be observed in figure $\ref{fig:many_different_lambda_values}$. Figure $\ref{fig:three_different_lambda_values}$ shows three of figure $\ref{fig:many_different_lambda_values}$'s most significant deviations. On the left a too small and on the right a too large $\lambda$ value. The center images uses an appropriate value for $\lambda$. We conclude the following: A too small lambda value leads to an washed-out looking image. We can denote it as being \emph{smoothed out}. On the other hand, when using a too large $\lambda$ value, we obtain a noisy, bad looking reconstruction. Using a extremely large value can also lead to not-converged results. As we see when using $\lambda=2400$.
+
+These observations make sense, when we revisit our cost function defined in equation $\ref{eq:basis_cost_demosaicing}$. The parameter $\lambda$ scales the fitting term $\norm{u_c - g}^2_{\Omega_{c}}$. When using a large value the fitting term is weighted significantly more than the smoothness term. Moreover, looking at the definition of our update rule, we notice, that $\lambda$ directly affects the learning rate $\alpha$. Using a too large value may then lead to divergence of the gradient descend method.
 
 \begin{figure}[h!]
 \begin{center}
@@ -410,18 +411,6 @@ The effect of the regularization term $\lambda$ can be observed in figure $\ref{
 \label{fig:three_different_lambda_values}
 \end{figure}
  
- 
-
-
-
-% TODO Describe the effect of $\lambda$ on the solution.
-
-
-
-
-
-
-
 \subsection{Optimal $\lambda$ value}
 
 % TODO Find optimal $\lambda$.} In this section you should
