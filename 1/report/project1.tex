@@ -131,15 +131,19 @@ The variable $x_n$ depicts the unknown variable at iteration step $n$ we are loo
 So, applying this method to our problem, $x$ corresponds to the unknown demosaiced image $u$ and $E$ is the cost function from equation $\ref{eq:our_general_cost_function}$. Therefore, for the color channel $c$$\footnote{c denotes the substitute for either one of the following r,g,b color channels.}$ the gradient descend formulation of our problem is defined as the following:
 
 \begin{align}
-	u_{c}(i,j) = u_{c}(i,j) - \alpha \frac{\partial{E}}{\partial{u_{c} (i,j)}}(i,j)
+	u_{c}^{n+1}(i,j) = u_{c}^{n}(i,j) - \alpha \frac{\partial{E}}{\partial{u^{n}_{c} (i,j)}}(i,j)
 \label{eq:our_gradient_descend_method}	
 \end{align}
 
-Equation $\ref{eq:our_gradient_descend_method}$ describes how we have to update a pixel at location (x,y) for the color channel $c$ using the gradient descend method. We see, that this method needs an identity for the partial derivative applied on our cost function. Since the data we are dealing with (pixels) is in a discrete domain, we have to discretize the expression $\frac{\partial{E}}{\partial{u_{c} (i,j)}}$. The discretization of this expression is described in the next section.  
+Equation $\ref{eq:our_gradient_descend_method}$ describes how we have to update a pixel at location (x,y) for the color channel $c$ using the gradient descend method. The index $n$ denotes the current iteration index. 
+
+We see, that this method needs an identity for the partial derivative applied on our cost function. In the following use omit the iteration index $n$ for the iterative solution $u_{c}^{n+1}$ from equation $\ref{eq:our_gradient_descend_method}$ and instead use the abbriviation $u_{c}$.
+
+Since the data we are dealing with (pixels) is in a discrete domain, we have to discretize the expression $\frac{\partial{E}}{\partial{u_{c} (i,j)}}$. The discretization of this expression is described in the next section.  
 
 \subsection{Derivations}
 
-In this subsection we derive an explicit approximation for the the partial derivative of our energy term $E$ that can be numerically computed. Such an approximation is useful since we will need its expression later for our update rule to solve our demosaicing optimization problem. For the discretization we will relying on a forward difference scheme. In other by the end of this section we will have derived an discretization of the following expression $\frac{\partial{E}}{\partial{u_{c} (i,j)}}(i,j)$.
+In this subsection we derive an explicit approximation for the the partial derivative of our energy term $E$ that can be numerically computed. Such an approximation is useful since we will need its expression later for our update rule to solve our demosaicing optimization problem. For the discretization we will relying on a forward difference scheme. By the end of this section we will have derived an discretization of the expression $\frac{\partial{E}}{\partial{u_{c} (i,j)}}(i,j)$.
 
 We start our derivation by simplifying the definition $\frac{\partial{E}}{\partial{u_{c} (i,j)}}(i,j)$.
 
@@ -191,6 +195,7 @@ We notice that $\tau$ is only the expression under the summation in the right ha
 
 \begin{equation}
 	\frac{\partial}{\partial u_{c}\left(i,j\right)} \norm{\nabla{u_c}}_2 = \underbrace{\frac{\partial{\tau_{c}\left(i,j\right)}}{\partial u_{c}\left(i,j\right)}}_{\bf{(a)}} + \underbrace{\frac{\partial{\tau_{c}\left(i-1,j\right)}}{\partial u_{c}\left(i,j\right)}}_{\bf{(b)}} + \underbrace{\frac{\partial{\tau_{c}\left(i,j-1\right)}}{\partial u_{c}\left(i,j\right)}}_{\bf{(c)}}
+\label{eq:abc_term}
 \end{equation}
 
 Next I will derive explicit expressions for the terms $\bf{(a)}$, $\bf{(b)}$ and $\bf{(c)}$. Loosely speaking our goal is to get rid of the partial derivative operator. The mathematical key concept I will rely on is the chain rule for partial derivatives. More precisely we will make use of the fact that $\partial_{x}\sqrt{f(x)}$ is $\frac{\partial_{x} f(x)}{2 \sqrt{f(x)}}$.
@@ -202,6 +207,7 @@ Next I will derive explicit expressions for the terms $\bf{(a)}$, $\bf{(b)}$ and
 	&= \frac{1}{2} \frac{2 (u_{c}(i+1,j)-u_{c}(i,j))(0-1) + 2 (u_{c}(i,j+1)-u_{c}(i,j))(0-1)}{\sqrt{ \left[u_{c}(i+1,j) - u_{c}(i,j)\right]^2 + \left[u_{c}(i,j+1) - u_{c}(i,j)\right]^2}} \nonumber \\
 	&= \frac{1}{2} \frac{2 [-(u_{c}(i+1,j)-u_{c}(i,j)) - (u_{c}(i,j+1)-u_{c}(i,j)]}{\tau_{c}\left(i,j\right)} \nonumber \\
 	&= \frac{2 u_{c} \left(i,j\right) - u_{c} \left(i+1,j\right)-u_{c} \left(i,j+1\right)}{\tau_{c}\left(i,j\right)}
+\label{eq:a_term}	
 \end{align}
 
 \begin{align}
@@ -211,6 +217,7 @@ Next I will derive explicit expressions for the terms $\bf{(a)}$, $\bf{(b)}$ and
 	&= \frac{1}{2} \frac{2[\left(u_{c}(i,j) - u_{c}(i-1,j)\right)(1-0) + \left(u_{c}(i-1,j+1) - u_{c}(i-1,j)\right)(0-0)]}{\sqrt{ \left[u_{c}(i,j) - u_{c}(i-1,j)\right]^2 + \left[u_{c}(i-1,j+1) - u_{c}(i-1,j)\right]^2}} \nonumber \\
 	&= \frac{1}{2} \frac{2\left[(u_{c}(i,j) - u_{c}(i-1,j)\right]}{\tau_{c}\left(i-1,j\right)} \nonumber \\
 	&= \frac{u_{c}\left(i,j\right) - u_{c}\left(i-1,j\right)}{\tau_{c}\left(i-1,j\right)}
+\label{eq:b_term}	
 \end{align}
 
 \begin{align}
@@ -220,25 +227,44 @@ Next I will derive explicit expressions for the terms $\bf{(a)}$, $\bf{(b)}$ and
 	&=  \frac{1}{2} \frac{2 [\left(u_{c}(i+1,j-1)-u_{c}(i,j-1)\right)(0 - 0) + \left(u_{c}(i,j) - u_{c}(i,j-1)\right)(1-0)]}{\sqrt{ \left[u_{c}(i+1,j-1)-u_{c}(i,j-1)\right]^2 + \left[u_{c}(i,j) - u_{c}(i,j-1)\right]^2}} \nonumber \\
 	&= \frac{1}{2} \frac{2 \left[u_{c}(i,j)- u_{c} (i,j-1)\right] }{\tau_{c}\left(i,j-1\right)} \nonumber \\			
 	&= \frac{u_{c}(i,j)-u_{c} \left(i,j-1\right)}{\tau_{c}\left(i,j-1\right)}
+\label{eq:c_term}	
 \end{align}
 
+Using the findings from the equations $\ref{eq:a_term}$, $\ref{eq:b_term}$ and $\ref{eq:c_term}$ and plug them into into equation $\ref{eq:abc_term}$ we get its final numerical identity:
+
+\begin{align}
+\frac{\partial}{\partial u_{c}\left(i,j\right)} \norm{\nabla{u_c}}_2 
+&= \Bigg(\frac{2 u_{c} \left(i,j\right) - u_{c} \left(i+1,j\right)-u_{c} \left(i,j+1\right)}{\tau_{c}\left(i,j\right)} \nonumber \\ 
+&+ \frac{u_{c}\left(i,j\right) - u_{c}\left(i-1,j\right)}{\tau_{c}\left(i-1,j\right)} \nonumber \\
+&+ \frac{u_{c}(i,j)-u_{c} \left(i,j-1\right)}{\tau_{c}\left(i,j-1\right)}\Bigg)
+\label{eq:plugged_abc}	
+\end{align}
+
+In the next section we will present the final update rule according to our last findings and derivations. Furthermore we describe what issues we have to address when implementing a script that solves our convex problem.
+
 \subsection{Implementation of Demosaicing}
+
+% write initial glue
+
+The resulting equation $\ref{eq:plugged_abc}$ is then plugged into equation $\ref{eq:part_deriv_e}$. This gives us our final update gradient descent update rule:
+
+\begin{align}
+	u_{c} (i,j)
+	&= u_{c}(i,j) - \alpha \frac{\partial{E(u_c)}}{\partial{u_{c} (i,j)}}(i,j) \nonumber \\
+	&= u_{c}(i,j) - \alpha \left( \frac{\partial}{\partial{u_{c} (i,j)}} \norm{\nabla u_{c}(i,j)}_2 + \lambda \Omega_{C}(i,j) \left( u_{c}(i,j) - g(i,j) \right) \right) \nonumber \\
+&\begin{aligned}
+  =u_{c}(i,j) - \alpha \Bigg( \lambda \Omega_{C}(i,j) \left( u_{c}(i,j) - g(i,j) \right) &+ \frac{2 u_{c} \left(i,j\right) - u_{c} \left(i+1,j\right)-u_{c} \left(i,j+1\right)}{\tau_{c}\left(i,j\right)} \\
+  &+ \frac{u_{c}\left(i,j\right) - u_{c}\left(i-1,j\right)}{\tau_{c}\left(i-1,j\right)} \\ 
+  &+ \frac{u_{c}(i,j)-u_{c} \left(i,j-1\right)}{\tau_{c}\left(i,j-1\right)}\Bigg) \\
+\end{aligned}
+\label{eq:final_update_rule}
+\end{align}
+
+
 \subsection{Experimenting with different $\lambda$ values}
 \subsection{Optimal $\lambda$ value}
 
-
 \begin{enumerate}
-\item \textbf{Problem.}
-
-\item \textbf{Motivations.} Describe the reasons and motivations behind this problem.
-\item \textbf{Derivation of gradient.} In this section you should:
-
-\begin{itemize}
-\item Write the finite difference approximation of the objective function $E$.
-\item Compute the gradient of the objective function $\nabla_uE$.  
-\end{itemize}
-
-
 \item \textbf{Implement gradient descent for demosaicing.} In this section you should:
 
 \begin{itemize}
