@@ -93,6 +93,7 @@ Mathematically we want to solve for
 
 \begin{equation}
 	\widetilde{u} = \argmin_{u_c} E(u_c)
+\label{eq:our_general_cost_function}
 \end{equation}
 
 We can further simplify the cost function stated in equation $\ref{eq:basis_cost_demosaicing}$ relying on the following observation: Since the function $\Omega_{C}$ is only true for pixels that correspond to the color channel C in the bayer mask, we see that $\Omega_{C}(x,y)\norm{u_{c}(x,y) - g(x,y)}$ is only not equal zero if the pixel at location $(x,y)$ belongs to the color channel $C$. Therefore we are allowed to solve the stated optimization problem from equation $\ref{eq:basis_cost_demosaicing}$ for each color channel separately. 
@@ -107,7 +108,7 @@ According to this insight we are supposed to minimize the following three indepe
 \label{eq:our_convex_probelm}		
 \end{align}
 
-Where we still rely on the measure defined in equation $\ref{eq:measure}$ but C was replayed by the appropriate color channel$\footnote{C stands for either the color channel R, G or B.}$.
+Where we still rely on the measure defined in equation $\ref{eq:measure}$ but C was replayed by the appropriate color channel$\footnote{C stands for either the color channel R, G or B.}$. We notice that the equations in $\ref{eq:our_convex_probelm}$ tell us that we have to solve three different energies similar to the one formulated in equation $\ref{eq:our_general_cost_function}$.
 
 In the next section we will describe how to solve the stated minimization problems from equation $\ref{eq:our_convex_probelm}$ numerically.
 
@@ -115,7 +116,7 @@ In the next section we will describe how to solve the stated minimization proble
 
 In the previous section we have formulated the demosaicing task as a convex optimization problem shown in equation $\ref{eq:our_convex_probelm}$. In this section we describe the method we will use for computing the solution of our stated minimization problem.
 
-To minimize our cost function $E$ we rely on the \emph{gradient descent} approach. This is an iterative method that can be used to solve energy minimiazion problems, such as our cost function. In detail, the following steps have to be performed when implementing the gradient descent approach:
+To minimize our cost function $E$ as required in equation $\ref{eq:our_general_cost_function}$, we rely on the \emph{gradient descent} approach. This is an iterative method that can be used to solve energy minimiazion problems, such as our cost function. In detail, the following steps have to be performed when implementing the gradient descent approach:
 \begin{enumerate}
 	\item Choose a random initial point $x_0$ for starting the iteration. 
 	\item Apply the following update rule:
@@ -127,16 +128,14 @@ To minimize our cost function $E$ we rely on the \emph{gradient descent} approac
 
 The variable $x_n$ depicts the unknown variable at iteration step $n$ we are looking for. $E(x_n)$ is the cost function that we aim to minimize, the parameter $\alpha$ describes the learning rate of the gradient descent method. It is responsible for the convergence rate of the method. If is is chosen too large, the method will eventually diverge, if chosen too small it will require too many iterations. If the distance $\footnote{w.r.t some given norm}$ between the current and the previous iteration is below a given threshold $\epsilon$ we have found a satisfying iterative solution for our unknown variable $x$, that is $x_{n+1}$.
 
-% Link explicitely this described method to our problem statement!
+So, applying this method to our problem, $x$ corresponds to the unknown demosaiced image $u$ and $E$ is the cost function from equation $\ref{eq:our_general_cost_function}$. Therefore, for the color channel $c$$\footnote{c denotes the substitute for either one of the following r,g,b color channels.}$ the gradient descend formulation of our problem is defined as the following:
 
 \begin{align}
 	u_{c}(i,j) = u_{c}(i,j) - \alpha \frac{\partial{E}}{\partial{u_{c} (i,j)}}(i,j)
+\label{eq:our_gradient_descend_method}	
 \end{align}
 
-where $c$ denotes the substitute for either one of the following r,g,b color channels. 
-
-
-% glue to next subsection what are we going to do.
+Equation $\ref{eq:our_gradient_descend_method}$ describes how we have to update a pixel at location (x,y) for the color channel $c$ using the gradient descend method. We see, that this method needs an identity for the partial derivative applied on our cost function. Since the data we are dealing with (pixels) is in a discrete domain, we have to discretize the expression $\frac{\partial{E}}{\partial{u_{c} (i,j)}}$. The discretization of this expression is described in the next section.  
 
 \subsection{Derivations}
 
