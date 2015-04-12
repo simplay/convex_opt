@@ -68,7 +68,15 @@
 In this work we will develop solution for the demosaicing problem when dealing with raw camera images. For that purpose we will formulate a convex optimization problem that is modeling the process of demosaicing a mosaiced image. We approximate our convex cost function by relying on the gradient descent and discretizing it using a forward difference scheme. We also examine the impact of the regularization parameter in our convex cost function by adjusting its value. Last, we describe how we can retrieve an optimal regularization term relying on SSD. 
 
 \subsection{Motivation}
-Most digital cameras acquire images from an image sensor overlaid with a color filter array (CFA). A color filter array depicts a mosaic of RGB color filters applied in front of the image sensor. An example is illustrated in figure $FIGURE$. This implies that each pixel in a raw camera image stores only the measured color channel value that corresponds to its pixel-position in the CFA. In other words, each pixel in a raw camera image represents one RGB color. Its color value depends on the color filter that is applied to that pixel. 
+Most digital cameras acquire images from an image sensor overlaid with a color filter array (CFA). A color filter array depicts a mosaic of RGB color filters applied in front of the image sensor. An example is illustrated in figure $\ref{fig:bayer_filters}$. This implies that each pixel in a raw camera image stores only the measured color channel value that corresponds to its pixel-position in the CFA. In other words, each pixel in a raw camera image represents one RGB color. Its color value depends on the color filter that is applied to that pixel. 
+
+\begin{figure}[t]
+\begin{center}
+\quad\quad   \includegraphics[width=0.8\linewidth]{figures/bayerfilter}
+\end{center}
+\caption{Depication of the Bayer filter. In this image we see the rgb color masks that are applied into the CFA sensors.}
+\label{fig:bayer_filters}
+\end{figure}
 
 Such a raw filter image does no look like we humans are used to see images. Therefore goal is to reconstruct the missing color channel information from the pixel's neighborhood. The described problem is also known as \emph{demosaicing}. One particular way how to address this problem is by is by billinearly interpolating the missing color information from a pixel's neighborhood. This is straight forward approach and can be implemented by solving a huge sparse linear system of equations. However, the resulting image may exhibits notable artifacts - colorfull fringes along texture-boundaries. Usually, this can be fixed by applying a non-linear filtering approach, such as a median filter. Such a filtering approach, however, assumes spatial coherence of the raw image's pixel.
 
