@@ -158,11 +158,20 @@ We start our derivation by simplifying the definition $\frac{\partial{E}}{\parti
 \label{eq:part_deriv_e}
 \end{align}
 
-A key step of the derivations is based on the following obseravtion: 
+The key step for the derivation of equation $\ref{eq:part_deriv_e}$ is based on the following observation: 
 
 $$ \forall (i',j')  \neq (i,j): \frac{\partial}{\partial{u_{c} (i,j)}} \Omega_{C}(i',j')\norm{u_{c}(i',j') - g(i',j')}^2 = 0 $$
+Which states that every index pair $(i',j')$ not equal to $(i,j)$ has a zero derivative along the direction $u_c(i,j)$. Another important fact we used for the derivation was that 
 
-using a forward difference approximation scheme for the derivatives $\partial_{i} u_c$ and $\partial_{j} u_c$ respectively, we can derive the following expression for the regularization term:
+\begin{align}
+	\Omega_{c}(i',j')\norm{u_{c}(i',j') - g(i',j')}^2
+	&= \sum_{c'\in \{ r,g,b \}} \Omega_{c'}(i',j')\norm{u_{c'}(i',j') - g(i',j')}^2 \nonumber \\
+	&= \Omega_{c'}(i',j')\left( u_{c'}(i',j') - g(i',j') \right)
+\end{align}
+
+For the current valid color channel $c'$. In other words, all other color channel components of the rgb vector have a zero value contribution except the currently selected channel $c'$.
+
+Next we have to derive an expression for the partial derivative applied in the two norm, i.e. $\frac{\partial}{\partial{u_{c} (i,j)}} \norm{\nabla u_c}_2$. For this purpose we make use of a forward difference approximation scheme for the derivatives $\partial_{i} u_c$ and $\partial_{j} u_c$ respectively, we can derive the following expression for the regularization term:
 
 \begin{align}
 	 \norm{\nabla{u_{c}}}_2 
