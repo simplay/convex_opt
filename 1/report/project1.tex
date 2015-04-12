@@ -73,20 +73,25 @@ More precisely, let $g$ denote the bayer filter camera raw input image. Then we 
 
 \begin{align}
 	E(u_c) =  \norm{\nabla u_c}_2 + \frac{\lambda}{2} \norm{u_c - g}^2_{\Omega_{c}}
+\label{eq:basis_cost_demosaicing}	
 \end{align}
 
 with the measure
 
 \begin{equation}
 	\norm{u_C - g}^2_{\Omega_{C}} = \sum_x \sum_y \Omega_{C}(x,y)\norm{u_{c}(x,y) - g(x,y)}^2
+\label{eq:measure}
 \end{equation}
 
-where C denotes the dhree diffeent color channels. $\Omega_{C}$ is defined such that $\Omega_{C}(x,y) = 1$ if the pixel value at $(x,y)$ is \emph{valid}$\footnote{this means that the pixel at location (x,y) is valid for the bayer color mask C}$ and $\Omega_{C}(x,y) = 0$ when the data is missing.
+where C denotes the three different color channels. $\Omega_{C}$ is defined such that $\Omega_{C}(x,y) = 1$ if the pixel value at $(x,y)$ is \emph{valid}$\footnote{this means that the pixel at location (x,y) is valid for the bayer color mask C}$ and $\Omega_{C}(x,y) = 0$ when the data is missing.
 
-MORE GLUE
+% describe the involved criteria l2 norm, regularization term
+% We see that the cost function depends on...
 
-According to these definitions we see that we can instead minimize three independent convex problems:
+We can further simplify the cost function stated in equation $\ref{eq:basis_cost_demosaicing}$ relying on the following observation: Since the function $\Omega_{C}$ is only true for pixels that correspond to the color channel C in the bayer mask, we see that $\Omega_{C}(x,y)\norm{u_{c}(x,y) - g(x,y)}$ is only not equal zero if the pixel at location $(x,y)$ belongs to the color channel $C$. Therefore we are allowed to solve the stated optimization problem from equation $\ref{eq:basis_cost_demosaicing}$ for each color channel separately. 
 
+
+According to this insight we are supposed to minimize the following three independent$\footnote{Independent in the sense that we are allowed to solve for each color channel separately}$ convex problems:
 
 \begin{align}
 	\widetilde{u_R} = \argmin_{u_R} \norm{\nabla u_R}_2 + \frac{\lambda}{2} \norm{u_R - g}^2_{\Omega_{R}} \\
@@ -94,15 +99,18 @@ According to these definitions we see that we can instead minimize three indepen
 	\widetilde{u_B} = \argmin_{u_B} \norm{\nabla u_R}_2 + \frac{\lambda}{2} \norm{u_B - g}^2_{\Omega_{B}}		
 \end{align}
 
+Where we still rely on the measure defined in equation $\ref{eq:measure}$ but C was replayed by the appropriate color channel$\footnote{C stands for either the color channel R, G or B.}$.
+
 \subsection{Gradient Descend}
 
 \begin{align}
 	u_{c}(i,j) = u_{c}(i,j) - \alpha \frac{\partial{E}}{\partial{u_{c} (i,j)}}(i,j)
 \end{align}
 
-where $c$ denotes the substitute for either one of the following r,g,b color channels. $\Omega_{}$  
+where $c$ denotes the substitute for either one of the following r,g,b color channels. $\Omega$  
 
 
+% glue to next subsection what are we going to do.
 
 \subsection{Derivations}
 
