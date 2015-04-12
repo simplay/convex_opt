@@ -112,11 +112,27 @@ In the next section we will describe how to solve the stated minimization proble
 
 \subsection{Gradient Descend}
 
+In the previous section we have formulated the demosaicing task as a convex optimization problem shown in equation $\ref{eq:our_convex_probelm}$. In this section we describe the method we will use for computing the solution of our stated minimization problem.
+
+To minimize our cost function $E$ we rely on the \emph{gradient descent} approach. This is an iterative method that can be used to solve energy minimiazion problems, such as our cost function. In detail, the following steps have to be performed when implementing the gradient descent approach:
+\begin{enumerate}
+	\item Choose a random initial point $x_0$ for starting the iteration. 
+	\item Apply the following update rule:
+		\begin{align}
+			x_{n+1} = x_n - \alpha \nabla{E(x_n)} 
+		\end{align}
+	\item Iterate until the update rule converges, i.e. $\norm{x_{n+1}-x_n} \leq \epsilon$
+\end{enumerate} 
+
+The variable $x_n$ depicts the unknown variable at iteration step $n$ we are looking for. $E(x_n)$ is the cost function that we aim to minimize, the parameter $\alpha$ describes the learning rate of the gradient descent method. It is responsible for the convergence rate of the method. If is is chosen too large, the method will eventually diverge, if chosen too small it will require too many iterations. If the distance $\footnote{w.r.t some given norm}$ between the current and the previous iteration is below a given threshold $\epsilon$ we have found a satisfying iterative solution for our unknown variable $x$, that is $x_{n+1}$.
+
+% Link explicitely this described method to our problem statement!
+
 \begin{align}
 	u_{c}(i,j) = u_{c}(i,j) - \alpha \frac{\partial{E}}{\partial{u_{c} (i,j)}}(i,j)
 \end{align}
 
-where $c$ denotes the substitute for either one of the following r,g,b color channels. $\Omega$  
+where $c$ denotes the substitute for either one of the following r,g,b color channels. 
 
 
 % glue to next subsection what are we going to do.
