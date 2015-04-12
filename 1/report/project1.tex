@@ -66,20 +66,30 @@ Such a raw filter image does no look like we humans are used to see images. Ther
 
 Since this approach is less mathematical sound we focus on another approach in this project. We try to formulate the the demosaicing task as a convex minimization problem.     
 
-\subsection{Problem}
+\subsection{Problem Statement}
+In this work we address the problem of demosaicing by formulating it as a convex optimization problem. Given a mosaiced image $g$ depicting a raw camera production, we want to find an optimal demosaiced image $u$. For describing the optimality property we take into account a cost function that describes the color smoothness and also that the resulting image $u$ should be close to the given raw input image $g$. 
+
+More precisely, let $g$ denote the bayer filter camera raw input image. Then we want to solve for $u=(u_r, u_g, u_g)$ (RGB image) minimzating the following energy term (cost function)
 
 \begin{align}
-	\widetilde{u_R} = \argmin_{u_R} \norm{\nabla u_R}_2 + \frac{\lambda}{2} \norm{u_R - g}^2_{\Omega_{R}} \\
-	\widetilde{u_G} = \argmin_{u_G} \norm{\nabla u_G}_2 + \frac{\lambda}{2} \norm{u_G - g}^2_{\Omega_{G}}\\
-	\widetilde{u_B} = \argmin_{u_B} \norm{\nabla u_R}_2 + \frac{\lambda}{2} \norm{u_B - g}^2_{\Omega_{B}}		
+	E(u_c) =  \norm{\nabla u_c}_2 + \frac{\lambda}{2} \norm{u_c - g}^2_{\Omega_{c}}
 \end{align}
+
+with
 
 \begin{equation}
 	\norm{u_C - g}^2_{\Omega_{C}} = \sum_x \sum_y \Omega_{C}(x,y)\norm{u_{c}(x,y) - g(x,y)}^2
 \end{equation}
 
+where ...
+
+according to these definitions we see that we can instead minimize three independent convex problems:
+
+
 \begin{align}
-	E(u_{c}) =  \norm{\nabla u_c}_2 + \frac{\lambda}{2} \norm{u_c - g}^2_{\Omega_{R}}
+	\widetilde{u_R} = \argmin_{u_R} \norm{\nabla u_R}_2 + \frac{\lambda}{2} \norm{u_R - g}^2_{\Omega_{R}} \\
+	\widetilde{u_G} = \argmin_{u_G} \norm{\nabla u_G}_2 + \frac{\lambda}{2} \norm{u_G - g}^2_{\Omega_{G}}\\
+	\widetilde{u_B} = \argmin_{u_B} \norm{\nabla u_R}_2 + \frac{\lambda}{2} \norm{u_B - g}^2_{\Omega_{B}}		
 \end{align}
 
 \subsection{Gradient Descend}
