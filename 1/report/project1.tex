@@ -58,11 +58,15 @@
 %\end{figure}
 
 \section{Demosaicing}
-\subsection{Problem}
-Most digital cameras acquire images from an image sensor overlaid with a color filter array (CFA). A color filter array depicts a mosaic of RGB color filters applied in front of the image sensor. An example is illustrated in figure $FIGURE$. This implies that each pixel in a raw camera image stores only the measured color channel value that corresponds to its pxiel-position in the CFA.
-
 
 \subsection{Motivation}
+Most digital cameras acquire images from an image sensor overlaid with a color filter array (CFA). A color filter array depicts a mosaic of RGB color filters applied in front of the image sensor. An example is illustrated in figure $FIGURE$. This implies that each pixel in a raw camera image stores only the measured color channel value that corresponds to its pixel-position in the CFA. In other words, each pixel in a raw camera image represents one RGB color. Its color value depends on the color filter that is applied to that pixel. 
+
+Such a raw filter image does no look like we humans are used to see images. Therefore goal is to reconstruct the missing color channel information from the pixel's neighborhood. The described problem is also known as demosaicing. One particular way how to address this problem is by is by billinearly interpolating the missing color information from a pixel's neighborhood. This is straight forward approach and can be implemented by solving a huge sparse linear system of equations. However, the resulting image may exhibits notable artifacts - colorfull fringes along texture-boundaries. Usually, this can be fixed by applying a non-linear filtering approach, such as a median filter. Such a filtering approach, however, assumes spatial coherence of the raw image's pixel.
+
+Since this approach is less mathematical sound we focus on another approach in this project. We try to formulate the the demosaicing task as a convex minimization problem.     
+
+\subsection{Problem}
 
 \begin{align}
 	\widetilde{u_R} = \argmin_{u_R} \norm{\nabla u_R}_2 + \frac{\lambda}{2} \norm{u_R - g}^2_{\Omega_{R}} \\
@@ -83,6 +87,10 @@ Most digital cameras acquire images from an image sensor overlaid with a color f
 \begin{align}
 	u_{c}(i,j) = u_{c}(i,j) - \alpha \frac{\partial{E}}{\partial{u_{c} (i,j)}}(i,j)
 \end{align}
+
+where $c$ denotes the substitute for either one of the following r,g,b color channels. $\Omega_{}$  
+
+
 
 \subsection{Derivations}
 
@@ -141,6 +149,9 @@ Next I will derive explicit expressions for the terms $\bf{(a)}$, $\bf{(b)}$ and
 	&= \frac{u_{c}(i,j)-u_{c} \left(i,j-1\right)}{\tau_{c}\left(i,j-1\right)}
 \end{align}
 
+\subsection{Implementation of Demosaicing}
+\subsection{Experimenting with different $\lambda$ values}
+\subsection{Optimal $\lambda$ value}
 
 
 \begin{enumerate}
