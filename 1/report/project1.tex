@@ -266,6 +266,11 @@ This observation tells us, that we have to extend the images $g$ and $u$ by a 2 
 
 For choosing the BC we have several possibilities. For my implementation I only experimented with Dirichlet BC, that directly constraint the pixel value of the boundary pixels. Another possibility would have been to try out von Neumann BC by constrainting the derivatives on the boundary directly. However, I did not try this out, since as far as I understand my problem it is less related to some velocity vector field. The demosaicing is rather supposed to denote a spatial coherent problem. For such problems there is rather a constant velocity field present. This intuition made me choose the Dirichlet BC. 
 There are different choices for defining Dirichlet BC. We could think of simply assigning the value zero on the boundary$\footnote{This corresponds to zero padding}$, define some axial symmetry$\footnote{This means that the boundary axis depicts the mirror axis. I.e. u(d, y) = u(-d,y)} and so forth.$ or assume that the image is periodically repeated. I tried all three variants and got the best results using a symmetric BC.
+% TODO show some images when using different Dirichlet BCs
+
+The update uses the learning rate parameter $\alpha$. I used a pretty small value for it of $\alpha=0.001$. Using this value for alpha resulted in convergence of my results. Note that I determined this value by a try and error approach. The only free parameter left to be retrieved is hence the regularization term $\lambda$.
+
+In the next section I will demonstrate some results I get when using my demosaicing function for different $\lambda$ values. 
 
 \subsection{Experimenting with different $\lambda$ values}
 \subsection{Optimal $\lambda$ value}
