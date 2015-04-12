@@ -264,6 +264,9 @@ Note that our update rule uses the auxiliary function $\tau$ defined as in equat
 
 This observation tells us, that we have to extend the images $g$ and $u$ by a 2 pixel width and height border. In other words, the images $u$, $g$ are extended by 2 pixels on the left, on the right, on top and on the bottom. This extension depicts our \emph{boundary condition} (BC). Defining a explicit BC will fully constraint our system and will finally allow us to solve the optimization problem. Note once chosen a particular BC and found an iterative solution, this introduced boundary can simply be truncated. This ensures the same dimensionality as we initially had.
 
+For choosing the BC we have several possibilities. For my implementation I only experimented with Dirichlet BC, that directly constraint the pixel value of the boundary pixels. Another possibility would have been to try out von Neumann BC by constrainting the derivatives on the boundary directly. However, I did not try this out, since as far as I understand my problem it is less related to some velocity vector field. The demosaicing is rather supposed to denote a spatial coherent problem. For such problems there is rather a constant velocity field present. This intuition made me choose the Dirichlet BC. 
+There are different choices for defining Dirichlet BC. We could think of simply assigning the value zero on the boundary$\footnote{This corresponds to zero padding}$, define some axial symmetry$\footnote{This means that the boundary axis depicts the mirror axis. I.e. u(d, y) = u(-d,y)} and so forth.$ or assume that the image is periodically repeated. I tried all three variants and got the best results using a symmetric BC.
+
 \subsection{Experimenting with different $\lambda$ values}
 \subsection{Optimal $\lambda$ value}
 
