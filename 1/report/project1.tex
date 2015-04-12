@@ -410,11 +410,29 @@ These observations make sense, when we revisit our cost function defined in equa
 \caption{Resized version of some good examples from figure $\ref{fig:many_different_lambda_values}$ illustrating the impact of the regularization parameter $\lambda$}
 \label{fig:three_different_lambda_values}
 \end{figure}
+
  
 \subsection{Optimal $\lambda$ value}
 
-% TODO Find optimal $\lambda$.} In this section you should
-% TODO Display the $SSD$ vs. $\lambda$ graph.
+
+\begin{figure}[h!]
+\begin{center}
+  \subfigure[SSD vs $\lambda$ ]{
+   \includegraphics[scale =0.5] {figures/fruitsBig_best_x_y}
+   \label{fig:subfig11}
+ }
+~
+ \subfigure[Log(SSD) vs $\lambda$]{
+   \includegraphics[scale =0.5] {figures/fruitsBig_best_xlogy}
+   \label{fig:subfig12}
+ }
+\end{center}
+\caption{Illustration of the $SSD$ vs. $\lambda$ plots. The vertical line denote sthe optimal value for $\lambda$.}
+\label{fig:ssd_lambda_plots}
+\end{figure}
+
+
+
 % TODO Describe the effect of $\lambda$ with respect to the $SSD$ between the ground truth and the solution image.
 
 \end{document}
