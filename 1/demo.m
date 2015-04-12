@@ -7,7 +7,7 @@ clear all;
 close all;
 clc;
 
-iter = 10000;
+iter = 5000;
 FIND_OPTIMUM = false;
 im = imread('Input/fruits.png');
 im = imresize(im,2);
@@ -43,5 +43,7 @@ demosaicedImg = demosaic(mosaiced, Omega, bestLambda, iter);
 
 %% display results
 figure;
-disp = [mosaiced, (im-demosaicedImg).^2; demosaicedImg, im];
-imshow(disp);
+displ = [mosaiced, (im-demosaicedImg).^2; demosaicedImg, im];
+imshow(displ);
+disp('Image Legend From from left to the right from top to bottom:');
+disp('mosaiced, ssd ground truth demosaiced, demosaiced, ground-truth');
