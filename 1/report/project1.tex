@@ -287,7 +287,43 @@ The update uses the learning rate parameter $\alpha$. I used a pretty small valu
 
 In the next section I will demonstrate some results I get when using my demosaicing function for different $\lambda$ values. 
 
+% TODO Show some images, as the the gradient method progresses iteration by iteration. Display the initial and the final image and 3 more images in between.
+
+\begin{figure}[h!]
+\begin{center}
+  \subfigure[Zero Iterations]{
+   \includegraphics[scale =0.23] {figures/fruits_Big_mosaiced}
+   \label{fig:subfig111}
+ }
+ \subfigure[10000 Iterations]{
+   \includegraphics[scale =0.23] {figures/fruits_l1740i10000Big}
+   \label{fig:subfig122}
+ }
+
+\end{center}
+\label{fig:different_iters_for_best_lambda}
+\caption{Different numbers of Iterations using the best possible $\lambda$ value. How this value can be obtained is described in the last section. We get a nice result when only performing 10000 Iterations using an $\alpha=0.0001$ and $\lambda = 1740$ for the fruits data set.}
+\end{figure}
+
 \subsection{Experimenting with different $\lambda$ values}
+
+
+\begin{figure}[h!]
+\begin{center}
+  \subfigure[Mosaiced Input]{
+   \includegraphics[scale =0.23] {figures/fruits_Big_mosaiced}
+   \label{fig:subfig111}
+ }
+ \subfigure[Ground Truth]{
+   \includegraphics[scale =0.23] {figures/fuits_origB}
+   \label{fig:subfig122}
+ }
+
+\end{center}
+\label{fig:input_and_ground_truth}
+\caption{Our given mosaiced input image and its reference ground truth.}
+\end{figure}
+
 
 \begin{figure}[h!]
 \begin{center}
