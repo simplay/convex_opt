@@ -333,6 +333,8 @@ For comparison figure $\ref{fig:input_and_ground_truth}$ shows our mosaiced inpu
    \label{fig:subfig122}
  }
 
+The effect of the regularization term $\lambda$ can be observed in figure $\ref{fig:many_different_lambda_values}$. Figure $\ref{fig:three_different_lambda_values}$ shows its three most significant deviations. On the left a too small and on the right a too large $\lambda$ value. The center images uses an appropriate value for $\lambda$.
+
 \end{center}
 \caption{Our given mosaiced input image and its reference ground truth.}
 \label{fig:input_and_ground_truth}
@@ -404,15 +406,15 @@ For comparison figure $\ref{fig:input_and_ground_truth}$ shows our mosaiced inpu
 
 \end{center}
 
-\label{fig:three_different_lambda_values}
 \caption{Resized version of some good examples from figure $\ref{fig:many_different_lambda_values}$ illustrating the impact of the regularization parameter $\lambda$}
+\label{fig:three_different_lambda_values}
 \end{figure}
  
  
 
 
 
-
+% TODO Describe the effect of $\lambda$ on the solution.
 
 
 
@@ -422,31 +424,8 @@ For comparison figure $\ref{fig:input_and_ground_truth}$ shows our mosaiced inpu
 
 \subsection{Optimal $\lambda$ value}
 
-\begin{enumerate}
-\item \textbf{Implement gradient descent for demosaicing.} In this section you should:
+% TODO Find optimal $\lambda$.} In this section you should
+% TODO Display the $SSD$ vs. $\lambda$ graph.
+% TODO Describe the effect of $\lambda$ with respect to the $SSD$ between the ground truth and the solution image.
 
-\begin{itemize}
-\item Show some images, as the the gradient method progresses iteration by iteration. Display the initial and the final image and 3 more images in between.
-\end{itemize}
-
-\item \textbf{Show images obtained by very high, very low and optimal $\lambda$.} In this section you should:
-
-\begin{itemize}
-\item Display 3 images with different $\lambda$ (very low, very high and optimal).
-\item Describe the effect of $\lambda$ on the solution.
-\end{itemize}
-
-\item \textbf{ Find optimal $\lambda$.} In this section you should:
-
-\begin{itemize}
-\item Display the $SSD$ vs. $\lambda$ graph.
-\item Describe the effect of $\lambda$ with respect to the $SSD$ between the ground truth and the solution image.
-\end{itemize}
-
-
-\end{enumerate}
-
-
- \end{document}
- 
- 
+\end{document}
