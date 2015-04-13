@@ -340,7 +340,7 @@ For comparison figure $\ref{fig:input_and_ground_truth}$ shows our mosaiced inpu
 
 The effect of the regularization term $\lambda$ can be observed in figure $\ref{fig:many_different_lambda_values}$. Figure $\ref{fig:three_different_lambda_values}$ shows three of figure $\ref{fig:many_different_lambda_values}$'s most significant deviations. On the left a too small and on the right a too large $\lambda$ value. The center images uses an appropriate value for $\lambda$. We conclude the following: A too small lambda value leads to an washed-out looking image. We can denote it as being \emph{smoothed out}. On the other hand, when using a too large $\lambda$ value, we obtain a noisy, bad looking reconstruction. Using a extremely large value can also lead to not-converged results. As we see when using $\lambda=2400$.
 
-These observations make sense, when we revisit our cost function defined in equation $\ref{eq:basis_cost_demosaicing}$. The parameter $\lambda$ scales the fitting term $\norm{u_c - g}^2_{\Omega_{c}}$. When using a large value the fitting term is weighted significantly more than the smoothness term. Moreover, looking at the definition of our update rule, we notice, that $\lambda$ directly affects the learning rate $\alpha$. Using a too large value may then lead to divergence of the gradient descend method.
+These observations make sense, when we revisit our cost function defined in equation $\ref{eq:basis_cost_demosaicing}$. The parameter $\lambda$ scales the fitting term $\norm{u_c - g}^2_{\Omega_{c}}$. When using a large value the fitting term is weighted significantly more than the smoothness term. Moreover, looking at the definition of our update rule, we notice, that $\lambda$ directly affects the learning rate $\alpha$. Using a too large value may then lead to divergence of the gradient descend method. Thus, the following rule of thumb holds true: The lager $\lambda$ gets, the smaller $\alpha$ should be chosen.
 
 \begin{figure}[h!]
 \begin{center}
@@ -414,6 +414,14 @@ These observations make sense, when we revisit our cost function defined in equa
  
 \subsection{Optimal $\lambda$ value}
 
+In this section we finally describe how the best $\lambda$ value can be determined. Furthermore we show some plots comparing the \emph{sum of squared distances} (SSD) error between the computed demosaiced image and the ground truth image. 
+
+The idea how I determined the best $\lambda$ is rather simple: For a fixed number of iterations, I run my gradient descend solver several times for different $\lambda$ values. For each intermediate result, I computed the SSD between the currently computed demosaiced image and the ground truth image. Figure $\ref{fig:ssd_lambda_plots}$ contains two SSD vs $\lambda$ parameter value plots. The first subfigure is simple plotting the SSD against the different $\lambda$ values. The second figure shows the log(SSD) vs. $\lambda$ plot. I also plotted the log(SSD) plot, since this helps to see how much the error decreases when changing the value $\lambda$. We observe the following: For very small $\lambda$ values we get have a large SSD error. This error decreases strongly exponentially until $\lambda=600$ Then the error does not decrease much more. The best $\lambda$ value with the smallest SSD error for our given data set is indicated by a vertical orange line. Its actual value is $\lambda=1740$. We further observe that the SSD error starts to grow again exponentially for $\lambda$ values larger than this retrieved best $\lambda$. The reason for this phenomenon is explained in detail within the previous section.   
+
+
+One additional remark: Usually we do not know the ground truth image a priori. Then, we cannot directly compute the SSD error as we did before. 
+
+One way to address this issue would be to apply some RANSAC strategy by iteratively use the currently best computed demosaiced image as new the ground truth and restart the whole iteration process over and over again. Whenever a better demosaiced image has been computed (i.e. the SSD descreases) retained that image and use it as the new ground truth candidate. Then restart the whole iteration process. Do this for some number of times. After this fixed number of iterations, consider the current ground truth candidate as the real ground truth. Proceed from now as described in the previous paragraph.     
 
 \begin{figure}[h!]
 \begin{center}
@@ -431,8 +439,6 @@ These observations make sense, when we revisit our cost function defined in equa
 \label{fig:ssd_lambda_plots}
 \end{figure}
 
-
-
-% TODO Describe the effect of $\lambda$ with respect to the $SSD$ between the ground truth and the solution image.
+In Summary, within some $\lambda$ range, the difference between the computed demosaiced image and the ground truth decreases. However, before and after this range, the SSD error grows exponentially.
 
 \end{document}
