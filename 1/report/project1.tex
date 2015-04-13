@@ -40,7 +40,7 @@
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 \DeclareMathOperator*{\argmin}{arg\,min}
 
-\title{Assignment 1}
+\title{Project 1 - Demosaicing}
 
 
 
@@ -64,25 +64,25 @@
 %\label{fig:performance}
 %\end{figure}
 
-\section{Demosaicing}
-In this work we will develop solution for the demosaicing problem when dealing with raw camera images. For that purpose we will formulate a convex optimization problem that is modeling the process of demosaicing a mosaiced image. We approximate our convex cost function by relying on the gradient descent and discretizing it using a forward difference scheme. We also examine the impact of the regularization parameter in our convex cost function by adjusting its value. Last, we describe how we can retrieve an optimal regularization term relying on SSD. 
 
-\subsection{Motivation}
+In this work we will develop solution for the demosaicing problem when dealing with raw camera images. For that purpose we will formulate a convex optimization problem that is modelling the process of demosaicing a mosaiced image. We approximate our convex cost function by relying on the gradient descent and discretizing it using a forward difference scheme. We also examine the impact of the regularization parameter in our convex cost function by adjusting its value. Last, we describe how we can retrieve an optimal regularization term relying on SSD. 
+
+\section{Motivation}
 Most digital cameras acquire images from an image sensor overlaid with a color filter array (CFA). A color filter array depicts a mosaic of RGB color filters applied in front of the image sensor. An example is illustrated in figure $\ref{fig:bayer_filters}$. This implies that each pixel in a raw camera image stores only the measured color channel value that corresponds to its pixel-position in the CFA. In other words, each pixel in a raw camera image represents one RGB color. Its color value depends on the color filter that is applied to that pixel. 
 
 \begin{figure}[H]
 \begin{center}
 \quad\quad   \includegraphics[width=0.8\linewidth]{figures/bayerfilter}
 \end{center}
-\caption{Depication of the Bayer filter. In this image we see the rgb color masks that are applied into the CFA sensors.}
+\caption{Depication of the Bayer filter. In this image we see the RGB color masks that are applied into the CFA sensors.}
 \label{fig:bayer_filters}
 \end{figure}
 
-Such a raw filter image does no look like we humans are used to see images. Therefore goal is to reconstruct the missing color channel information from the pixel's neighborhood. The described problem is also known as \emph{demosaicing}. One particular way how to address this problem is by is by billinearly interpolating the missing color information from a pixel's neighborhood. This is straight forward approach and can be implemented by solving a huge sparse linear system of equations. However, the resulting image may exhibits notable artifacts - colorfull fringes along texture-boundaries. Usually, this can be fixed by applying a non-linear filtering approach, such as a median filter. Such a filtering approach, however, assumes spatial coherence of the raw image's pixel.
+Such a raw filter image does no look like we humans are used to see images. Therefore goal is to reconstruct the missing color channel information from the pixel's neighborhood. The described problem is also known as \emph{demosaicing}. One particular way how to address this problem is by is by bilinearly interpolating the missing color information from a pixel's neighborhood. This is straight forward approach and can be implemented by solving a huge sparse linear system of equations. However, the resulting image may exhibits notable artifacts - colorfull fringes along texture-boundaries. Usually, this can be fixed by applying a non-linear filtering approach, such as a median filter. Such a filtering approach, however, assumes spatial coherence of the raw image's pixel.
 
 Since this approach is less mathematical sound we focus on another approach in this project. We try to formulate the the demosaicing task as a convex minimization problem.     
 
-\subsection{Problem Statement}
+\section{Problem Statement}
 In this work we address the problem of demosaicing by formulating it as a convex optimization problem. Given a mosaiced image $g$ depicting a raw camera production, we want to find an optimal demosaiced image $u$. For describing the optimality property we take into account a cost function that describes the color smoothness and also that the resulting image $u$ should be close to the given raw input image $g$. 
 
 More precisely, let $g$ denote the bayer filter camera raw input image. Then we want to solve for $u=(u_r, u_g, u_g)$ (RGB image) minimzating the following energy term (cost function):
@@ -127,11 +127,11 @@ Where we still rely on the measure defined in equation $\ref{eq:measure}$ but C 
 
 In the next section we will describe how to solve the stated minimization problems from equation $\ref{eq:our_convex_probelm}$ numerically.
 
-\subsection{Methodology}
+\section{Methodology}
 
 In the previous section we have formulated the demosaicing task as a convex optimization problem shown in equation $\ref{eq:our_convex_probelm}$. In this section we describe the method we will use for computing the solution of our stated minimization problem.
 
-To minimize our cost function $E$ as required in equation $\ref{eq:our_general_cost_function}$, we rely on the \emph{gradient descent} approach. This is an iterative method that can be used to solve energy minimiazion problems, such as our cost function. In detail, the following steps have to be performed when implementing the gradient descent approach:
+To minimize our cost function $E$ as required in equation $\ref{eq:our_general_cost_function}$, we rely on the \emph{gradient descent} approach. This is an iterative method that can be used to solve energy minimization problems, such as our cost function. In detail, the following steps have to be performed when implementing the gradient descent approach:
 \begin{enumerate}
 	\item Choose a random initial point $x_0$ for starting the iteration. 
 	\item Apply the following update rule:
@@ -152,11 +152,11 @@ So, applying this method to our problem, $x$ corresponds to the unknown demosaic
 
 Equation $\ref{eq:our_gradient_descend_method}$ describes how we have to update a pixel at location (x,y) for the color channel $c$ using the gradient descend method. The index $n$ denotes the current iteration index. 
 
-We see, that this method needs an identity for the partial derivative applied on our cost function. In the following use omit the iteration index $n$ for the iterative solution $u_{c}^{n+1}$ from equation $\ref{eq:our_gradient_descend_method}$ and instead use the abbriviation $u_{c}$.
+We see, that this method needs an identity for the partial derivative applied on our cost function. In the following use omit the iteration index $n$ for the iterative solution $u_{c}^{n+1}$ from equation $\ref{eq:our_gradient_descend_method}$ and instead use the abbreviation $u_{c}$.
 
 Since the data we are dealing with (pixels) is in a discrete domain, we have to discretize the expression $\frac{\partial{E}}{\partial{u_{c} (i,j)}}$. The discretization of this expression is described in the next section.  
 
-\subsection{Derivations}
+\section{Derivations}
 
 In this subsection we derive an explicit approximation for the the partial derivative of our energy term $E$ that can be numerically computed. Such an approximation is useful since we will need its expression later for our update rule to solve our demosaicing optimization problem. For the discretization we will relying on a forward difference scheme. By the end of this section we will have derived an discretization of the expression $\frac{\partial{E}}{\partial{u_{c} (i,j)}}(i,j)$.
 
@@ -188,7 +188,7 @@ Which states that every index pair $(i',j')$ not equal to $(i,j)$ has a zero der
 	&= \Omega_{c'}(i',j')\left( u_{c'}(i',j') - g(i',j') \right)
 \end{align}
 
-For the current valid color channel $c'$. In other words, all other color channel components of the rgb vector have a zero value contribution except the currently selected channel $c'$.
+For the current valid color channel $c'$. In other words, all other color channel components of the RGB vector have a zero value contribution except the currently selected channel $c'$.
 
 Next we have to derive an expression for the partial derivative applied in the two norm, i.e. $\frac{\partial}{\partial{u_{c} (i,j)}} \norm{\nabla u_c}_2$. For this purpose we make use of a forward difference approximation scheme for the derivatives $\partial_{i} u_c$ and $\partial_{j} u_c$ respectively, we can derive the following expression for the regularization term:
 
@@ -258,7 +258,7 @@ Using the findings from the equations $\ref{eq:a_term}$, $\ref{eq:b_term}$ and $
 
 In the next section we will present the final update rule according to our last findings and derivations. Furthermore we describe what issues we have to address when implementing a script that solves our convex problem.
 
-\subsection{Implementation of Demosaicing}
+\section{Implementation}
 
 In this section we explain how the convex demosaicing can be implemented using the gradient descend method. Since the problem is currently underconstrainted we also will have to choose some boundary condition. But first off, we formulate the final update gradient descend update rule by plugging the resulting equation $\ref{eq:plugged_abc}$ into equation $\ref{eq:part_deriv_e}$. Doing so we get the following final update rule:
 
@@ -275,6 +275,7 @@ In this section we explain how the convex demosaicing can be implemented using t
 \end{align}
 
 We only have to define a function that implements the final update rule from equation $\ref{eq:final_update_rule}$. This function is then evaluated for each given color channel. Assuming we have computed the approximations for all color channels, we only have to combine all intermediate results to an RGB image$\footnote{In Matlab this can be achieved by using the function reshape.}$.
+
 Note that our update rule uses the auxiliary function $\tau$ defined as in equation $\ref{eq:tau_function}$. Note that $\tau(i,j)$ queries the indices $(i+1)$ and $(j+1)$. Furthermore, our update rule uses the indices (i+1) and (j+1) for some of its $u_c$ terms. Hence, when plugging the index (i+1) into $\tau$, for example, then the index $u(i+2,j)$ will be accessed. Similarly, some terms in our update rule access the index (i-1). When plugging this index into $\tau$ the query $u_c(i-2, j)$ will be performed. Analogues, for the indices j. 
 
 This observation tells us, that we have to extend the images $g$ and $u$ by a 2 pixel width and height border. In other words, the images $u$, $g$ are extended by 2 pixels on the left, on the right, on top and on the bottom. This extension depicts our \emph{boundary condition} (BC). Defining a explicit BC will fully constraint our system and will finally allow us to solve the optimization problem. Note once chosen a particular BC and found an iterative solution, this introduced boundary can simply be truncated. This ensures the same dimensionality as we initially had.
@@ -317,7 +318,7 @@ In my implementation I always use a fixed number of iterations. Figure $\ref{fig
 
 In the next section I will demonstrate some results I get when using my demosaicing function for different $\lambda$ values. 
 
-\subsection{Experimenting with different $\lambda$ values}
+\section{Experimenting with different $\lambda$ values}
 In this section we will examine how the regularization term affects the resulting images. We will show results produced using a too large $\lambda$, a too small $\lambda$ and results using appropriate $\lambda$ values.
 
 For comparison figure $\ref{fig:input_and_ground_truth}$ shows our mosaiced input image and its ground truth version.
@@ -412,7 +413,7 @@ These observations make sense, when we revisit our cost function defined in equa
 \end{figure}
 
  
-\subsection{Optimal $\lambda$ value}
+\section{Optimal $\lambda$ value}
 
 In this section we finally describe how the best $\lambda$ value can be determined. Furthermore we show some plots comparing the \emph{sum of squared distances} (SSD) error between the computed demosaiced image and the ground truth image. 
 
@@ -444,7 +445,7 @@ One way to address this issue would be to apply some RANSAC strategy by iterativ
 
 In Summary, within some $\lambda$ range, the difference between the computed demosaiced image and the ground truth decreases. However, before and after this range, the SSD error grows exponentially.
 
-\subsection{Conclusion}
+\section{Conclusion}
 In this work we have seen a convex optimization formulation of the demosaicing problem. We furthermore described how to solve this convex problem numerically. In the experiments we played around with different values of the regularization parameter $\lambda$. We also described how such an optimal parameter can be computed. 
 
 In the following some additional results. Figure $\ref{fig:complete_5k_fruits}$ and figure $\ref{fig:complete_500_fruits}$ show all produced results when running our convex solver on the fruit data set.
