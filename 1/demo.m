@@ -7,9 +7,10 @@ clear all;
 close all;
 clc;
 
-iter = 2000;
-FIND_OPTIMUM = false;
+iter = 500;
+FIND_OPTIMUM = true;
 im = imread('Input/fruits.png');
+im = imread('Input/woodensweater.jpg');
 im = imresize(im,2);
 [m,n,~] = size(im);
 im = im2double(im);

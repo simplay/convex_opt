@@ -416,12 +416,15 @@ These observations make sense, when we revisit our cost function defined in equa
 
 In this section we finally describe how the best $\lambda$ value can be determined. Furthermore we show some plots comparing the \emph{sum of squared distances} (SSD) error between the computed demosaiced image and the ground truth image. 
 
-The idea how I determined the best $\lambda$ is rather simple: For a fixed number of iterations, I run my gradient descend solver several times for different $\lambda$ values. For each intermediate result, I computed the SSD between the currently computed demosaiced image and the ground truth image. Figure $\ref{fig:ssd_lambda_plots}$ contains two SSD vs $\lambda$ parameter value plots. The first subfigure is simple plotting the SSD against the different $\lambda$ values. The second figure shows the log(SSD) vs. $\lambda$ plot. I also plotted the log(SSD) plot, since this helps to see how much the error decreases when changing the value $\lambda$. We observe the following: For very small $\lambda$ values we get have a large SSD error. This error decreases strongly exponentially until $\lambda=600$ Then the error does not decrease much more. The best $\lambda$ value with the smallest SSD error for our given data set is indicated by a vertical orange line. Its actual value is $\lambda=1740$. We further observe that the SSD error starts to grow again exponentially for $\lambda$ values larger than this retrieved best $\lambda$. The reason for this phenomenon is explained in detail within the previous section.   
+The idea how I determined the best $\lambda$ is rather simple: For a fixed number of iterations$\footnote{I used 100 Iterations. I assume that the best determined value for a small number of iterations is also the best $\lambda$ value for a large number of iterations. }$, I run my gradient descend solver several times for different $\lambda$ values. For each intermediate result, I computed the SSD between the currently computed demosaiced image and the ground truth image. 
 
+Figure $\ref{fig:ssd_lambda_plots}$ contains two SSD vs $\lambda$ parameter value plots. The first subfigure is simple plotting the SSD against the different $\lambda$ values. The second figure shows the log(SSD) vs. $\lambda$ plot. I also plotted the log(SSD) plot, since this helps to see how much the error decreases when changing the value $\lambda$. 
+
+We observe the following: For very small $\lambda$ values we get have a large SSD error. This error decreases strongly exponentially until $\lambda=600$ Then the error does not decrease much more. The best $\lambda$ value with the smallest SSD error for our given data set is indicated by a vertical orange line. Its actual value is $\lambda=1740$. We further observe that the SSD error starts to grow again exponentially for $\lambda$ values larger than this retrieved best $\lambda$. The reason for this phenomenon is explained in detail within the previous section.   
 
 One additional remark: Usually we do not know the ground truth image a priori. Then, we cannot directly compute the SSD error as we did before. 
 
-One way to address this issue would be to apply some RANSAC strategy by iteratively use the currently best computed demosaiced image as new the ground truth and restart the whole iteration process over and over again. Whenever a better demosaiced image has been computed (i.e. the SSD descreases) retained that image and use it as the new ground truth candidate. Then restart the whole iteration process. Do this for some number of times. After this fixed number of iterations, consider the current ground truth candidate as the real ground truth. Proceed from now as described in the previous paragraph.     
+One way to address this issue would be to apply some RANSAC strategy by iteratively use the currently best computed demosaiced image as new the ground truth and restart the whole iteration process over and over again. Whenever a better demosaiced image has been computed (i.e. the SSD decreases) retained that image and use it as the new ground truth candidate. Then restart the whole iteration process. Do this for some number of times. After this fixed number of iterations, consider the current ground truth candidate as the real ground truth. Proceed from now as described in the previous paragraph.     
 
 \begin{figure}[H]
 \begin{center}
@@ -444,6 +447,57 @@ In Summary, within some $\lambda$ range, the difference between the computed dem
 \subsection{Conclusion}
 In this work we have seen a convex optimization formulation of the demosaicing problem. We furthermore described how to solve this convex problem numerically. In the experiments we played around with different values of the regularization parameter $\lambda$. We also described how such an optimal parameter can be computed. 
 
-In the following some additional figures.
+In the following some additional results. Figure $\ref{fig:complete_5k_fruits}$ and figure $\ref{fig:complete_500_fruits}$ show all produced results when running our convex solver on the fruit data set.
+
+\begin{figure}[H]
+\begin{center}
+  \subfigure[Mosaiced]{
+   \includegraphics[width=0.47\linewidth] {figures/add/fruits_i5k_mos}
+   \label{fig:subfig11}
+ }
+ \subfigure[SSD]{
+   \includegraphics[width=0.47\linewidth] {figures/add/fruits_i5k_ssd}
+   \label{fig:subfig12}
+ }
+ ~
+  \subfigure[Demosaiced]{
+   \includegraphics[width=0.47\linewidth] {figures/add/fruits_i5k_demosaiced}
+   \label{fig:subfig11}
+ }
+ \subfigure[Ground Truth]{
+   \includegraphics[width=0.47\linewidth] {figures/add/fruits_i5k_gt}
+   \label{fig:subfig12}
+ }
+  
+\end{center}
+\caption{Demosaiced image using the best $\lambda=1740$ and running 5000 iterations on the fruits data set.}
+\label{fig:complete_5k_fruits}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+  \subfigure[Mosaiced]{
+   \includegraphics[width=0.47\linewidth] {figures/add/fruits_i500_mos}
+   \label{fig:subfig11}
+ }
+ \subfigure[SSD]{
+   \includegraphics[width=0.47\linewidth] {figures/add/fruits_i500_ssd}
+   \label{fig:subfig12}
+ }
+ ~
+  \subfigure[Demosaiced]{
+   \includegraphics[width=0.47\linewidth] {figures/add/fruits_i500_demosaiced}
+   \label{fig:subfig11}
+ }
+ \subfigure[Ground Truth]{
+   \includegraphics[width=0.47\linewidth] {figures/add/fruits_i500_gt}
+   \label{fig:subfig12}
+ }
+  
+\end{center}
+\caption{Demosaiced image using the best $\lambda=1740$ and running 500 iterations on the fruits data set.}
+\label{fig:complete_500_fruits}
+\end{figure}
+
 
 \end{document}
