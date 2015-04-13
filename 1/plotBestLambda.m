@@ -1,3 +1,6 @@
+% Convex Optimization - Project 1
+% MICHAEL SINGLE
+% 08-917-445
 function plotBestLambda( error, stepSize, bestLambda, min_r, max_r, doPlotLog )
 %PLOTBESTLAMBDA show error lambda plot to determine best lambda value.
 %   to have all required plotting data either run the script findBestLmabda

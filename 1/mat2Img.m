@@ -1,3 +1,6 @@
+% Convex Optimization - Project 1
+% MICHAEL SINGLE
+% 08-917-445
 function [ img ] = mat2Img( A, B, C )
 %MAT2IMG takes 3 (m x n) Matrices and reshapes them to an (m x n x 3) Image.
 % @param A, B, and C are (m x n) matrices.

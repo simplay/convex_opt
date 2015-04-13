@@ -1,3 +1,6 @@
+% Convex Optimization - Project 1
+% MICHAEL SINGLE
+% 08-917-445
 function [ red, green, blue ] = getMasks(m, n)
 %GETMASKS Bayer color filters as n x m matrices.
     % @param m, n are natural numbers > 0. specifying the mask dimensions

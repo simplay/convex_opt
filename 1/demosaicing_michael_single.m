@@ -1,4 +1,7 @@
-function [demosaicedImg] = demosaic(mosaiced, Omega, lambda, iterations)
+% Convex Optimization - Project 1
+% MICHAEL SINGLE
+% 08-917-445
+function [demosaicedImg] = demosaicing_michael_single(mosaiced, Omega, lambda, iterations)
 % DEMOSAIC demosaices a given mosaiced image by solving a convex opt.
 %          problem relying on gradient descend using a Symmetric BC 
 %          and a fixed numer of iteration.

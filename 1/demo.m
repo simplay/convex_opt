@@ -42,7 +42,7 @@ else
 end
 
 %% compute demosaiced img
-demosaicedImg = demosaic(mosaiced, Omega, bestLambda, iter);
+demosaicedImg = demosaicing_michael_single(mosaiced, Omega, bestLambda, iter);
 
 %% display results
 figure;
