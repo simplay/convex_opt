@@ -446,9 +446,11 @@ One way to address this issue would be to apply some RANSAC strategy by iterativ
 In Summary, within some $\lambda$ range, the difference between the computed demosaiced image and the ground truth decreases. However, before and after this range, the SSD error grows exponentially.
 
 \section{Conclusion}
-In this work we have seen a convex optimization formulation of the demosaicing problem. We furthermore described how to solve this convex problem numerically. In the experiments we played around with different values of the regularization parameter $\lambda$. We also described how such an optimal parameter can be computed. 
+In this work we have seen a convex optimization formulation of the demosaicing problem. We furthermore described how to solve this convex problem numerically. In the experiments we played around with different values for the regularization parameter $\lambda$. We also described how such an optimal parameter can be computed. 
 
-In the following some additional results. Figure $\ref{fig:complete_5k_fruits}$ and figure $\ref{fig:complete_500_fruits}$ show all produced results when running our convex solver on the fruit data set.
+In the following some additional results. Figure $\ref{fig:complete_5k_fruits}$ and figure $\ref{fig:complete_500_fruits}$ show all produced results when running our convex solver on the fruit data set. The figures figure $\ref{fig:complete_1000_sweater}$ and figure $\ref{fig:complete_500_sweater}$ show similar results for our other data set, the wooden sweater. Overall, we can conclude that our convex solver produces pleasant results.
+
+
 
 \begin{figure}[H]
 \begin{center}
@@ -500,5 +502,57 @@ In the following some additional results. Figure $\ref{fig:complete_5k_fruits}$ 
 \label{fig:complete_500_fruits}
 \end{figure}
 
+\begin{figure}[H]
+\begin{center}
+  \subfigure[Mosaiced]{
+   \includegraphics[width=0.47\linewidth] {figures/add/sweater_i1000_mos}
+   \label{fig:subfig11}
+ }
+ \subfigure[SSD]{
+   \includegraphics[width=0.47\linewidth] {figures/add/sweater_i1000_ssd}
+   \label{fig:subfig12}
+ }
+ ~
+  \subfigure[Demosaiced]{
+   \includegraphics[width=0.47\linewidth] {figures/add/sweater_i1000_demosaiced}
+   \label{fig:subfig11}
+ }
+ \subfigure[Ground Truth]{
+   \includegraphics[width=0.47\linewidth] {figures/add/sweater_i1000_gt}
+   \label{fig:subfig12}
+ }
+\end{center}
+\caption{Demosaiced image using the $\lambda=596$ and running 1000 iterations on the wooden sweater data set.}
+\label{fig:complete_1000_sweater}
+\end{figure}
+ 
+\begin{figure}[H]
+\begin{center}
+  \subfigure[Mosaiced]{
+   \includegraphics[width=0.47\linewidth] {figures/add/sweater_i500_mos}
+   \label{fig:subfig11}
+ }
+ \subfigure[SSD]{
+   \includegraphics[width=0.47\linewidth] {figures/add/sweater_i500_ssd}
+   \label{fig:subfig12}
+ }
+ ~
+  \subfigure[Demosaiced]{
+   \includegraphics[width=0.47\linewidth] {figures/add/sweater_i500_demosaiced}
+   \label{fig:subfig11}
+ }
+ \subfigure[Ground Truth]{
+   \includegraphics[width=0.47\linewidth] {figures/add/sweater_i500_gt}
+   \label{fig:subfig12}
+ }
+  
+\end{center}
+\caption{Demosaiced image using the $\lambda=596$ and running 500 iterations on the wooden sweater data set.}
+\label{fig:complete_500_sweater}
+\end{figure}
+
+For future work we could try to generalize our convex solver to be capable to deal with other convex problems as stated in the exercise session. In some sense demosaicing is similar to the inpainting task. think of demosaicing as solving inpainting on a grayscale image three times, once for each color channel having always a different given mask. This mask corresponds to the bayer filter for its corresponding color channel. 
+
+Another extension would be to compare this convex approach of demosaicing with other demosaicing approaches, such as a bilinear filter approach followed by a median filtering post process.
 
 \end{document}
