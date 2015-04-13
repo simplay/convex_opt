@@ -70,7 +70,7 @@ In this work we will develop solution for the demosaicing problem when dealing w
 \subsection{Motivation}
 Most digital cameras acquire images from an image sensor overlaid with a color filter array (CFA). A color filter array depicts a mosaic of RGB color filters applied in front of the image sensor. An example is illustrated in figure $\ref{fig:bayer_filters}$. This implies that each pixel in a raw camera image stores only the measured color channel value that corresponds to its pixel-position in the CFA. In other words, each pixel in a raw camera image represents one RGB color. Its color value depends on the color filter that is applied to that pixel. 
 
-\begin{figure}[t]
+\begin{figure}[H]
 \begin{center}
 \quad\quad   \includegraphics[width=0.8\linewidth]{figures/bayerfilter}
 \end{center}
@@ -287,7 +287,7 @@ The update uses the learning rate parameter $\alpha$. I used a pretty small valu
 
 In my implementation I always use a fixed number of iterations. Figure $\ref{fig:different_iters_for_best_lambda}$ illustrated the results I get when using different numbers of total iterations for a fixed $\lambda$. We observe that using only 1000 iterations already leads to visually pleasant, good-looking results.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \begin{center}
   \subfigure[Zero Iterations]{
    \includegraphics[scale =0.23] {figures/fruits_Big_mosaiced}
@@ -322,7 +322,7 @@ In this section we will examine how the regularization term affects the resultin
 
 For comparison figure $\ref{fig:input_and_ground_truth}$ shows our mosaiced input image and its ground truth version.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \begin{center}
   \subfigure[Mosaiced Input]{
    \includegraphics[scale =0.23] {figures/fruits_Big_mosaiced}
@@ -342,7 +342,7 @@ The effect of the regularization term $\lambda$ can be observed in figure $\ref{
 
 These observations make sense, when we revisit our cost function defined in equation $\ref{eq:basis_cost_demosaicing}$. The parameter $\lambda$ scales the fitting term $\norm{u_c - g}^2_{\Omega_{c}}$. When using a large value the fitting term is weighted significantly more than the smoothness term. Moreover, looking at the definition of our update rule, we notice, that $\lambda$ directly affects the learning rate $\alpha$. Using a too large value may then lead to divergence of the gradient descend method. Thus, the following rule of thumb holds true: The lager $\lambda$ gets, the smaller $\alpha$ should be chosen.
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \begin{center}
   \subfigure[$\lambda=1$]{
    \includegraphics[scale =0.16] {figures/fruits_l1i1000Big}
@@ -388,7 +388,7 @@ These observations make sense, when we revisit our cost function defined in equa
 \end{figure}
 
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \begin{center}
   \subfigure[$\lambda=1$]{
    \includegraphics[scale =0.4] {figures/fruits_l1i1000Big}
@@ -423,7 +423,7 @@ One additional remark: Usually we do not know the ground truth image a priori. T
 
 One way to address this issue would be to apply some RANSAC strategy by iteratively use the currently best computed demosaiced image as new the ground truth and restart the whole iteration process over and over again. Whenever a better demosaiced image has been computed (i.e. the SSD descreases) retained that image and use it as the new ground truth candidate. Then restart the whole iteration process. Do this for some number of times. After this fixed number of iterations, consider the current ground truth candidate as the real ground truth. Proceed from now as described in the previous paragraph.     
 
-\begin{figure}[h!]
+\begin{figure}[H]
 \begin{center}
   \subfigure[SSD vs $\lambda$ ]{
    \includegraphics[scale =0.5] {figures/fruitsBig_best_x_y}
@@ -440,5 +440,10 @@ One way to address this issue would be to apply some RANSAC strategy by iterativ
 \end{figure}
 
 In Summary, within some $\lambda$ range, the difference between the computed demosaiced image and the ground truth decreases. However, before and after this range, the SSD error grows exponentially.
+
+\subsection{Conclusion}
+In this work we have seen a convex optimization formulation of the demosaicing problem. We furthermore described how to solve this convex problem numerically. In the experiments we played around with different values of the regularization parameter $\lambda$. We also described how such an optimal parameter can be computed. 
+
+In the following some additional figures.
 
 \end{document}
