@@ -7,7 +7,7 @@ clear all;
 close all;
 clc;
 
-iter = 500;
+iter = 1000;
 FIND_OPTIMUM = false;
 im = imread('Input/fruits.png');
 im = imresize(im,2);
