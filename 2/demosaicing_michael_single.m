@@ -46,7 +46,7 @@ function [demosaicedImg] = demosaicing_michael_single(mosaiced, Omega, lambda, i
        [By_n, Bx_n, Bx_tilde_n] = primal_dual_solver(By_n, Bx_n, Bx_tilde_n, mosaiced(:,:,3), Omega(:,:,3), lambda, tau, sigma, theta);
     end
     close(h); 
-    demosaicedImg = mat2Img(uR,uG,uB);
+    demosaicedImg = mat2Img(Rx_tilde_n, Gx_tilde_n, Bx_tilde_n);
 end
 
 function [y_n_p_1, x_n_p_1, x_tilde_n_p_1] = primal_dual_solver(y_n, x_n, x_tilde_n, g, Omega, lambda, tau, sigma, theta)
