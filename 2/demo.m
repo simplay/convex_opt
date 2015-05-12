@@ -1,4 +1,4 @@
-% Convex Optimization - Project 1
+% Convex Optimization - Project 2
 % MICHAEL SINGLE
 % 08-917-445
 
