@@ -93,7 +93,7 @@ function [y_n_p_1, x_n_p_1, x_tilde_n_p_1] = primal_dual_solver(y_n, x_n, x_tild
 end
 
 function y_n_p_1 = y_n_plus_1_for(y_n, x_tilde, sigma)
-    grad_tilde_x = grad_of(x_tilde);
+    grad_tilde_x = grad_of(x_tilde, 'fwd');
     y_nominator = y_n - sigma*grad_tilde_x;
     norm_y_nominator = sqrt(y_nominator(:,:,1).^2 + y_nominator(:,:,2).^2);
     y_denominator = max(1, norm_y_nominator);
@@ -114,50 +114,39 @@ function x_tilde_n_p_1 = x_tilde_n_plus_1_for(x_n_p_1, x_n, theta)
     x_tilde_n_p_1 = x_n_p_1 + theta*(x_n_p_1 - x_n);
 end
 
-function grad_f = grad_of(f)
+function grad_f = grad_of(f, type)
+% compute discrete gradient of a 2-dim function f
+% relying on a certain finite difference approximation scheme.
+% @param f 2d function (values) encoded as a MxN matrix
+% @param type String type of finite difference approx. schemme:
+%        type == 'fwd' for a foreward diff. scheme
+%        type == 'bwd' for a backward diff. scheme
+%        type == 'cd' for a central diff. scheme
+% @return grad_f MxNx2 matrix storing [df/dx, df/dy].
 
     grad_f = zeros([size(f), 2]);
-    
-    % foreward differences   
-    df_dx = f([2:end, end],:)-f;
-    df_dy = f(:,[2:end, end])-f;
-    
-    % backward differences
-    %df_dx = f-f([1,1:end-1],:);
-    %df_dy = f-f(:,[1,1:end-1]);
-    
-    % central differences
-    %df_dx = ( f([2:end,end],:) - f([1,1:end-1],:) )/2;
-    %df_dy = ( f(:,[2:end,end]) - f(:,[1,1:end-1]) )/2;
+    if (strcmp(type,'fwd') == 1)
+        % foreward differences   
+        df_dx = f([2:end, end],:)-f;
+        df_dy = f(:,[2:end, end])-f;
+        
+    elseif(strcmp(type,'bwd') == 1)
+        % backward differences
+        df_dx = f-f([1,1:end-1],:);
+        df_dy = f-f(:,[1,1:end-1]);
+        
+    elseif (strcmp(type,'cd') == 1)
+        %central differences
+        df_dx = ( f([2:end,end],:) - f([1,1:end-1],:) )/2;
+        df_dy = ( f(:,[2:end,end]) - f(:,[1,1:end-1]) )/2;
+    end    
     
     grad_f(:,:,1) = df_dx;
     grad_f(:,:,2) = df_dy;
-
-end
-
-function grad_f = grad_of2(f)
-
-    grad_f = zeros([size(f), 2]);
-    
-    % foreward differences   
-    %df_dx = f([2:end, end],:)-f;
-    %df_dy = f(:,[2:end, end])-f;
-    
-    % backward differences
-    df_dx = f-f([1,1:end-1],:);
-    df_dy = f-f(:,[1,1:end-1]);
-    
-    % central differences
-    %df_dx = ( f([2:end,end],:) - f([1,1:end-1],:) )/2;
-    %df_dy = ( f(:,[2:end,end]) - f(:,[1,1:end-1]) )/2;
-    
-    grad_f(:,:,1) = df_dx;
-    grad_f(:,:,2) = df_dy;
-
 end
 
 function div_v = div_of(v)
-   grad_v_x = grad_of2(v(:,:,1));
-   grad_v_y = grad_of2(v(:,:,2));
+   grad_v_x = grad_of(v(:,:,1), 'bwd');
+   grad_v_y = grad_of(v(:,:,2), 'bwd');
    div_v = grad_v_x(:,:,1) + grad_v_y(:,:,2);
 end
