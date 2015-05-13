@@ -22,7 +22,7 @@ function [demosaicedImg] = demosaicing_michael_single(mosaiced, Omega, lambda, i
 
     % parameter
     K_a = sqrt(4);
-    tau = 0.2*1e-3; 
+    tau = 10*0.2*1e-3; 
     sigma = 1/(tau*K_a);
     disp(['tau*sigma=',num2str(tau*sigma)]);
     theta = 0.0;
