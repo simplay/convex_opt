@@ -20,9 +20,10 @@ function [demosaicedImg] = demosaicing_michael_single(mosaiced, Omega, lambda, i
 % @param iterations [Integer] number of iterations
 % @return demosaicedImg M x N x 3 Color Image.
 
-    % parameters 
-    tau = 0.008; 
-    sigma = 1/0.06;
+    % parameters
+    K_a = sqrt(4);
+    tau = 1e-4; 
+    sigma = 1/(tau*K_a);
     disp(['tau*sigma=',num2str(tau*sigma)]);
     theta = 0.5;
 
@@ -31,23 +32,26 @@ function [demosaicedImg] = demosaicing_michael_single(mosaiced, Omega, lambda, i
     Gx_n = mosaiced(:,:,2);
     Bx_n = mosaiced(:,:,3);
 
-    Ry_n = ones([size(Rx_n), 2]);
-    Gy_n = ones([size(Gx_n), 2]);
-    By_n = ones([size(Bx_n), 2]);
+    Ry_n = zeros([size(Rx_n), 2]);
+    Gy_n = zeros([size(Gx_n), 2]);
+    By_n = zeros([size(Bx_n), 2]);
     
     Rx_tilde_n = Rx_n;
     Gx_tilde_n = Gx_n;
     Bx_tilde_n = Bx_n;
     
-    h = waitbar(0,'Progress Gradient Descend');
+    %h = waitbar(0,'Progress Gradient Descend');
     for i = 1:iterations
-       waitbar(i/iterations) 
+       %waitbar(i/iterations) 
        [Ry_n, Rx_n, Rx_tilde_n] = primal_dual_solver(Ry_n, Rx_n, Rx_tilde_n, mosaiced(:,:,1), Omega(:,:,1), lambda, tau, sigma, theta);
-       [Gy_n, Gx_n, Gx_tilde_n] = primal_dual_solver(Gy_n, Gx_n, Gx_tilde_n, mosaiced(:,:,2), Omega(:,:,2), lambda, tau, sigma, theta);
-       [By_n, Bx_n, Bx_tilde_n] = primal_dual_solver(By_n, Bx_n, Bx_tilde_n, mosaiced(:,:,3), Omega(:,:,3), lambda, tau, sigma, theta);
+       %[Gy_n, Gx_n, Gx_tilde_n] = primal_dual_solver(Gy_n, Gx_n, Gx_tilde_n, mosaiced(:,:,2), Omega(:,:,2), lambda, tau, sigma, theta);
+       %[By_n, Bx_n, Bx_tilde_n] = primal_dual_solver(By_n, Bx_n, Bx_tilde_n, mosaiced(:,:,3), Omega(:,:,3), lambda, tau, sigma, theta);
+       imagesc(Rx_n);
+       drawnow
     end
-    close(h); 
-    demosaicedImg = mat2Img(Rx_tilde_n, Gx_tilde_n, Bx_tilde_n);
+    %close(h); 
+    %demosaicedImg = mat2Img(Rx_tilde_n, Gx_tilde_n, Bx_tilde_n);
+    demosaicedImg = mat2Img(Rx_tilde_n, Rx_tilde_n, Rx_tilde_n);
 end
 
 function [y_n_p_1, x_n_p_1, x_tilde_n_p_1] = primal_dual_solver(y_n, x_n, x_tilde_n, g, Omega, lambda, tau, sigma, theta)
@@ -79,7 +83,7 @@ end
 
 function x_n_p_1 = x_n_plus_1_for(x_n, y_n_p_1, lambda, tau, Omega, g)
     div_y_n_p_1 = div_of(y_n_p_1);
-    x_n_p_1_nominator = x_n + tau*div_y_n_p_1 + tau*lambda*(Omega.*g);
+    x_n_p_1_nominator = x_n - tau*div_y_n_p_1 + tau*lambda*(Omega.*g);
     x_n_p_1_denominator = 1 + tau*lambda*Omega;
     x_n_p_1 = x_n_p_1_nominator./x_n_p_1_denominator;
 end
@@ -96,13 +100,17 @@ function grad_f = grad_of(f)
     df_dx = f([2:end, end],:)-f(:,:);
     df_dy = f(:,[2:end, end])-f(:,:);
     
+    %df_dx = f(:,:)-f([1,1:end-1],:);
+    %df_dy = f(:,:)-f(:,[1,1:end-1]);
+    
 
     % central differences
-    df_dx = ( f([2:end,end],:) - f([1,1:end-1],:) )/2;
-    df_dy = ( f(:,[2:end,end]) - f(:,[1,1:end-1]) )/2;
+    %df_dx = ( f([2:end,end],:) - f([1,1:end-1],:) )/2;
+    %df_dy = ( f(:,[2:end,end]) - f(:,[1,1:end-1]) )/2;
     
     grad_f(:,:,1) = df_dx;
     grad_f(:,:,2) = df_dy;
+    
 end
 
 function div_v = div_of(v)

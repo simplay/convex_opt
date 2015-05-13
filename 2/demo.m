@@ -12,7 +12,7 @@ FIND_OPTIMUM = false;
 im = imread('Input/fruits.png');
 %im = imresize(im,2);
 %im = imread('Input/woodensweater.jpg');
-im = imresize(im,0.7);
+im = imresize(im,0.5);
 [m,n,~] = size(im);
 im = im2double(im);
 
@@ -20,6 +20,12 @@ im = im2double(im);
 
 % bayer filter tensor
 [ red_mask, green_mask, blue_mask ] = getMasks( m, n );
+
+red_mask = ones(size(red_mask));
+green_mask = ones(size(red_mask));
+blue_mask = ones(size(red_mask));
+
+
 Omega = mat2Img(red_mask, green_mask, blue_mask);
 
 % demosaiced img
