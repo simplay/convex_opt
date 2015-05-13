@@ -48,7 +48,8 @@ else
 end
 
 %% compute demosaiced img
-demosaicedImg = demosaicing_michael_single(mosaiced, Omega, bestLambda, iter, input);
+verbose = false;
+demosaicedImg = demosaicing_michael_single(mosaiced, Omega, bestLambda, iter, input, verbose);
 
 %% display results
 figure;

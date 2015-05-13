@@ -1,7 +1,7 @@
 % Convex Optimization - Project 2
 % MICHAEL SINGLE
 % 08-917-445
-function [demosaicedImg] = demosaicing_michael_single(mosaiced, Omega, lambda, iterations, input)
+function [demosaicedImg] = demosaicing_michael_single(mosaiced, Omega, lambda, iterations, input, verbose)
 % DEMOSAIC demosaices a given mosaiced image by solving a convex opt.
 %          problem relying on primal dual solver 
 %          and a fixed numer of iteration.
@@ -19,6 +19,8 @@ function [demosaicedImg] = demosaicing_michael_single(mosaiced, Omega, lambda, i
 %        when solving the demosaicing convex minimization problem.
 % @param iterations [Integer] number of iterations
 % @return demosaicedImg M x N x 3 Color Image.
+
+    eps = 1e-4;
 
     % parameter
     K_a = sqrt(4);
@@ -39,7 +41,7 @@ function [demosaicedImg] = demosaicing_michael_single(mosaiced, Omega, lambda, i
     Rx_tilde_n = Rx_n;
     Gx_tilde_n = Gx_n;
     Bx_tilde_n = Bx_n;
-    %figure
+    if(verbose) figure; end
     
     %h = waitbar(0,'Progress Gradient Descend');
     for i = 1:iterations
@@ -55,22 +57,32 @@ function [demosaicedImg] = demosaicing_michael_single(mosaiced, Omega, lambda, i
        before_r_x_ = Rx_tilde_n;
        before_g_x_ = Gx_tilde_n;
        before_b_x_ = Bx_tilde_n;
+       E_u_R_prev = energy_term_for(Rx_tilde_n, mosaiced(:,:,1), Omega(:,:,1), lambda);
        
        [Ry_n, Rx_n, Rx_tilde_n] = primal_dual_solver(before_r_y, before_r_x, before_r_x_, mosaiced(:,:,1), Omega(:,:,1), lambda, tau, sigma, theta);
        [Gy_n, Gx_n, Gx_tilde_n] = primal_dual_solver(before_g_y, before_g_x, before_g_x_, mosaiced(:,:,2), Omega(:,:,2), lambda, tau, sigma, theta);
        [By_n, Bx_n, Bx_tilde_n] = primal_dual_solver(before_b_y, before_b_x, before_b_x_, mosaiced(:,:,3), Omega(:,:,3), lambda, tau, sigma, theta);
        
-       a = input(:,:,1);
-       b = Rx_tilde_n;
        
-       %plot(i,norm(a(:)-b(:)),'.');
-       %hold on;
-       %imagesc(Rx_n);
-       %drawnow
+       
+       E_u_R = energy_term_for(Rx_tilde_n, mosaiced(:,:,1), Omega(:,:,1), lambda);
+       if verbose
+           plot(i,log(norm(E_u_R(:)-E_u_R_prev(:))+eps),'.');
+           hold on;
+           %imagesc(Rx_n);
+           drawnow
+       end
     end
     %close(h); 
     demosaicedImg = mat2Img(Rx_tilde_n, Gx_tilde_n, Bx_tilde_n);
     %demosaicedImg = mat2Img(Rx_tilde_n, Rx_tilde_n, Rx_tilde_n);
+end
+
+function E_u = energy_term_for(u, g, omega, lambda)
+    similarity = (u-g).*omega;
+    smoothness = grad_of(u, 'fwd');
+    l2 = @(f) sqrt(f(:,:,1).^2 + f(:,:,2).^2);
+    E_u = (lambda*0.5)*norm(similarity(:)) + l2(smoothness);
 end
 
 function [y_n_p_1, x_n_p_1, x_tilde_n_p_1] = primal_dual_solver(y_n, x_n, x_tilde_n, g, Omega, lambda, tau, sigma, theta)
