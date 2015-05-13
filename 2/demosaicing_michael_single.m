@@ -21,8 +21,9 @@ function [demosaicedImg] = demosaicing_michael_single(mosaiced, Omega, lambda, i
 % @return demosaicedImg M x N x 3 Color Image.
 
     % parameters 
-    tau = 0.001; 
-    sigma = 0.001;
+    tau = 0.008; 
+    sigma = 1/0.06;
+    disp(['tau*sigma=',num2str(tau*sigma)]);
     theta = 0.5;
 
     % initial guesses 
@@ -88,11 +89,18 @@ function x_tilde_n_p_1 = x_tilde_n_plus_1_for(x_n_p_1, x_n, theta)
 end
 
 function grad_f = grad_of(f)
-% foreward difference scheme
 
     grad_f = zeros([size(f), 2]);
+    
+    % foreward differences
     df_dx = f([2:end, end],:)-f(:,:);
     df_dy = f(:,[2:end, end])-f(:,:);
+    
+
+    % central differences
+    df_dx = ( f([2:end,end],:) - f([1,1:end-1],:) )/2;
+    df_dy = ( f(:,[2:end,end]) - f(:,[1,1:end-1]) )/2;
+    
     grad_f(:,:,1) = df_dx;
     grad_f(:,:,2) = df_dy;
 end

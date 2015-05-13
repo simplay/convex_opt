@@ -10,9 +10,9 @@ clc;
 iter = 1000;
 FIND_OPTIMUM = false;
 im = imread('Input/fruits.png');
-im = imresize(im,2);
+%im = imresize(im,2);
 %im = imread('Input/woodensweater.jpg');
-%im = imresize(im,0.5);
+im = imresize(im,0.7);
 [m,n,~] = size(im);
 im = im2double(im);
 
@@ -37,7 +37,7 @@ else
     % determined using findBestLambda(...)
     % for Input/fruits.png at 200x266 pixels
     % bestLambda = 1899;  % 1740 for big
-    bestLambda = 1740; 
+    bestLambda = 10; 
     % bestLambda = 596; % best lamdba for the sweatshirt dataset
 end
 
