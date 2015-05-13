@@ -15,15 +15,15 @@ im = imread('Input/fruits.png');
 im = imresize(im,0.5);
 [m,n,~] = size(im);
 im = im2double(im);
-
+input = im;
 %% compute demosaicing input
 
 % bayer filter tensor
 [ red_mask, green_mask, blue_mask ] = getMasks( m, n );
 
-red_mask = ones(size(red_mask));
-green_mask = ones(size(red_mask));
-blue_mask = ones(size(red_mask));
+%red_mask = ones(size(red_mask));
+%green_mask = ones(size(red_mask));
+%blue_mask = ones(size(red_mask));
 
 
 Omega = mat2Img(red_mask, green_mask, blue_mask);
@@ -43,12 +43,12 @@ else
     % determined using findBestLambda(...)
     % for Input/fruits.png at 200x266 pixels
     % bestLambda = 1899;  % 1740 for big
-    bestLambda = 10; 
+    bestLambda = 1; 
     % bestLambda = 596; % best lamdba for the sweatshirt dataset
 end
 
 %% compute demosaiced img
-demosaicedImg = demosaicing_michael_single(mosaiced, Omega, bestLambda, iter);
+demosaicedImg = demosaicing_michael_single(mosaiced, Omega, bestLambda, iter, input);
 
 %% display results
 figure;
