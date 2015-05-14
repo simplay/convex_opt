@@ -43,9 +43,9 @@ function [demosaicedImg] = demosaicing_michael_single(mosaiced, Omega, lambda, i
     Bx_tilde_n = Bx_n;
     if(verbose) figure; end
     
-    %h = waitbar(0,'Progress Gradient Descend');
+    h = waitbar(0,'Progress Gradient Descend');
     for i = 1:iterations
-       %waitbar(i/iterations) 
+       waitbar(i/iterations) 
        before_r_x = Rx_n;
        before_g_x = Gx_n;
        before_b_x = Bx_n;
@@ -73,7 +73,7 @@ function [demosaicedImg] = demosaicing_michael_single(mosaiced, Omega, lambda, i
            drawnow
        end
     end
-    %close(h); 
+    close(h); 
     demosaicedImg = mat2Img(Rx_tilde_n, Gx_tilde_n, Bx_tilde_n);
     %demosaicedImg = mat2Img(Rx_tilde_n, Rx_tilde_n, Rx_tilde_n);
 end
