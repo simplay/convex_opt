@@ -21,7 +21,7 @@ function [ bestLambda ] = findBestLambda(im, mosaiced, Omega, iter )
     error = zeros(1,420);
     parfor k=1:420,
         l = stepSize*k
-        current_demosaiced = demosaicing_michael_single(mosaiced, Omega, l, iter);
+        current_demosaiced = demosaicing_michael_single(mosaiced, Omega, l, iter, im, false);
         ssd = (im-current_demosaiced).^2;
         error(k) = sum(abs(ssd(:)));
     end
@@ -34,7 +34,7 @@ function [ bestLambda ] = findBestLambda(im, mosaiced, Omega, iter )
     error2 = zeros(1,2*stepSize);
     parfor k=1:2*stepSize,
         l = ind*stepSize-stepSize+k
-        current_demosaiced = demosaicing_michael_single(mosaiced, Omega, l, iter);
+        current_demosaiced = demosaicing_michael_single(mosaiced, Omega, l, iter, im, false);
         ssd = (im-current_demosaiced).^2;
         error2(k) = sum(abs(ssd(:)));
     end
