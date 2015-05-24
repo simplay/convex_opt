@@ -27,6 +27,12 @@
 
 
 
+\newcommand{\prox}{\text{prox}}
+
+\newcommand{\twonorm}[1]{\left\lVert#1\right\rVert_2}
+\usepackage[latin1]{inputenc} 
+\usepackage[T1]{fontenc} 
+
 
 \usepackage[latin1]{inputenc} 
 \usepackage[T1]{fontenc} 
@@ -55,5 +61,162 @@
 \maketitle
 
 
+\section{Problem Statement}
+
+In this work we address the problem of demosaicing by formulating it as a convex optimization problem. Given a mosaiced image $g$ depicting a raw camera production, we want to find an optimal demosaiced image $u$. For describing the optimality property we take into account a cost function that describes the color smoothness and also that the resulting image $u$ should be close to the given raw input image $g$. 
+
+More precisely, let $g$ denote the bayer filter camera raw input image. Then we want to solve for $u=(u_r, u_g, u_g)$ (RGB image) minimzating the following energy term (cost function):
+
+\begin{align}
+	E(u_c) = \norm{\nabla u_c}_2 + \frac{\lambda}{2} \norm{u_c - g}^2_{\Omega_{c}}
+\label{eq:basis_cost_demosaicing}	
+\end{align}
+
+with the measure
+
+\begin{equation}
+	\norm{u_C - g}^2_{\Omega_{C}} = \sum_x \sum_y \Omega_{C}(x,y)\norm{u_{c}(x,y) - g(x,y)}^2
+\label{eq:measure}
+\end{equation}
+
+
+where C denotes the three different color channels. $\Omega_{C}$ is defined such that $\Omega_{C}(x,y) = 1$ if the pixel value at $(x,y)$ is \emph{valid}$\footnote{this means that the pixel at location (x,y) is valid for the bayer color mask C}$ and $\Omega_{C}(x,y) = 0$ when the data is missing.
+
+The cost function from equation $\ref{eq:basis_cost_demosaicing}$ consists of a smoothness term, $\norm{\nabla u_c}_2$ and $\norm{u_c - g}^{2}_{\Omega_{c}}$. The first term ensures a smooth color transition between colors in a l2 norm sense. The second term ensures that the reconstructed images does not deviate too much from the given input, i.e. de demosaiced image should resemble to the provided mosaiced raw camera image. This similarity term is further parameterized by a regularization term $\lambda$, indicating how strong the output should match the given input according to the formulated measure in equation $\ref{eq:measure}$. In summary, larger values for $\lambda$ weight the similarity of the input and output image more, and contrarely, lower values weight the color smoothness term more.
+
+Hereby, minimizating the cost function from equation $\ref{eq:basis_cost_demosaicing}$ leads to an optimal demosaiced image $u$.
+Mathematically we want to solve for 
+
+\begin{equation}
+	\widetilde{u} = \argmin_{u_c} E(u_c)
+\label{eq:our_general_cost_function}
+\end{equation}
+
+We can further simplify the cost function stated in equation $\ref{eq:basis_cost_demosaicing}$ relying on the following observation: Since the function $\Omega_{C}$ is only true for pixels that correspond to the color channel C in the bayer mask, we see that $\Omega_{C}(x,y)\norm{u_{c}(x,y) - g(x,y)}$ is only not equal zero if the pixel at location $(x,y)$ belongs to the color channel $C$. Therefore we are allowed to solve the stated optimization problem from equation $\ref{eq:basis_cost_demosaicing}$ for each color channel separately. 
+
+
+According to this insight we are supposed to minimize the following three independent$\footnote{Independent in the sense that we are allowed to solve for each color channel separately}$ convex problems:
+
+
+
+\begin{align}
+	\widetilde{u}_R = \argmin_{u_R} \norm{\nabla u_R}_2 + \frac{\lambda}{2} \norm{u_R - g}^2_{\Omega_{R}} \nonumber \\
+	\widetilde{u}_G = \argmin_{u_G} \norm{\nabla u_G}_2 + \frac{\lambda}{2} \norm{u_G - g}^2_{\Omega_{G}}\nonumber \\
+	\widetilde{u}_B = \argmin_{u_B} \norm{\nabla u_R}_2 + \frac{\lambda}{2} \norm{u_B - g}^2_{\Omega_{B}}
+\label{eq:our_convex_probelm}		
+\end{align}
+
+Where we still rely on the measure defined in equation $\ref{eq:measure}$ but C was replayed by the appropriate color channel$\footnote{C stands for either the color channel R, G or B.}$. We notice that the equations in $\ref{eq:our_convex_probelm}$ tell us that we have to solve three different energies similar to the one formulated in equation $\ref{eq:our_general_cost_function}$.
+
+In the next section we will describe how to solve the stated minimization problems from equation $\ref{eq:our_convex_probelm}$ numerically.
+
+
+\section{Primal-Dual Form}
+In this section we derive the primal-dual form of the stated convex demosaicing problem.
+
+But first off, let us consider an initial problem of the form 
+
+\begin{align}
+	\min_{x \in X} F(K x) + G(x)
+\label{eq:initial_primal}	
+\end{align}
+
+where $F$, $G$ are convex functions and $K$ denotes a linear operator. 
+
+The primal-dual formulation for equation $\ref{eq:initial_primal}$ is given by 
+
+\begin{align}
+	\min_{x \in X} \max_{y \in Y} < Kx, y > - F^*(y) + G(x)
+\label{eq:initial_primal_dual}	
+\end{align}
+
+
+For a given mosaiced RGB image $u_{RGB}$ encoded as a 3 dimensional $M \times N$ matrix, i.e. a tensor of dimension $M \times N \times 3$. As mentioned in the problem statement we can solve three independent convex problems in order to solve the problem of demosaicing a RGB image. Therefore let in the following $u$ define stand for one particular color channel of the given color image $u_{RGB}$.
+
+\begin{equation}
+\min_{u \in U} \norm{\nabla u} + \frac{\lambda}{2} \norm{u - g}^2_{\Omega}
+\label{eq:initial_energy}
+\end{equation}
+
+where $\norm{u - g}^2_{\Omega}$ is defined as in equation $\ref{eq:measure}$ and $g$ is the corresponding color channel of the mosaiced image described in the problem statement.
+
+We observe that equation $\ref{eq:initial_energy}$ has the same structure as the initial problem stated in equation $\ref{eq:initial_primal}$. This allows us to formulate the primal-dual form of equation $\ref{eq:initial_energy}$ which will look like the following:
+
+\begin{align}
+	\min_{u \in U} \max_{y \in Y} < Kx, y > - F^*(y) + G(x)
+\label{eq:initial_primal_dual}	
+\end{align}
+
+Where $K$, $F$ and $G$ are defined as:
+
+\begin{align}
+	K &= \nabla \nonumber \\
+	F &= \norm{\cdot}_2 \nonumber \\
+	G &= \norm{u - g}^2_{\Omega}
+\label{eq:def_kfg}	
+\end{align}
+
+Note that $F*$ denotes the convex conjugate form of $F$. The convex conjugate of $F$ has an explicit identity that can be computed using the Legendre-Fenchel-Transform.
+
+\begin{align}
+	F^*(y) &= (\norm{\cdot}_2)^*(y) \nonumber \\
+		  &= \sup_x x^T y - \twonorm{x} \nonumber \\
+		  &= \sup_x x^T y - \max_{\twonorm{z} \leq 1} x^T z \nonumber \\
+		  &= \sup_x \min_{\twonorm{z} \leq 1} x^T(y-z) \nonumber \\
+		  &= \begin{cases}
+   				0  			& \text{if} \twonorm{y} \leq 1 \\
+   				\infty      & \text{otherwise}
+  			 \end{cases} \nonumber \\
+  		  &= \delta(y)
+\label{eq:legendre_fenchel_transform_f}  		  
+\end{align}
+
+The first equality is simply the definition of $F$. The second equality is using the so called Legendre-Fenchel transformation,
+
+\begin{equation}
+	(\norm{\cdot}_2)^*(y) = \sup_x x^T y - \twonorm{x} \nonumber
+\end{equation}. 
+
+In the third equality I make use of the Cauchy-Schwarz inequality, 
+\begin{equation}
+	\twonorm{x} = \max_{\twonorm{z} \leq 1} x^T z
+\end{equation}
+
+
+Plugging equation $\ref{eq:legendre_fenchel_transform_f}$ and the definitions in from equation $\ref{eq:def_kfg}$ into the primal-dual equation equation $\ref{eq:initial_primal_dual}$ we conclude the following final primal-dual formulation:
+
+\begin{equation}
+\min_{u \in U} \max_{y \in Y} <\nabla u, y> - \delta(y) + \frac{\lambda}{2}\norm{u - g}^2_{\Omega}
+\end{equation}
+
+
+\section{Update Rules}
+\subsection{Expression for $y^{n}$}
+\subsection{Expression for $x^{n}$}
+\subsection{Expression for $\bar{x}^{n}$}
+
+\section{Implementation}
+% mention why there is no minus sign in the div operator for discrete case
+% mention grad foreward difference, divergence operator backward difference 
+% otherwise we observe shifted gradients
+
+\section{Results}
+% display 
+\subsection{Parameter values}
+\subsection{Optimal $\lambda$}
+\section{Conclusion}
+% compare the two methods: gradient descent vs primal dual
+% in terms of performance and computational time
 
 \end{document}
+
+
+
+
+
+
+
+
+
+
+
