@@ -259,13 +259,45 @@ To simplify our derivation even and also get rid of the proximity operator we ne
 		
 		\begin{align}
 			\prox_{\lambda F^*}(y^n + \sigma K \bar{x}^{n})
+			&= (y^n + \sigma K \bar{x}^{n}) - \left( y^n + \sigma K \bar{x}^{n} \right) \max{\left(0, 1-\frac{1}{\twonorm{y^n + \sigma K \bar{x}^{n} }}\right)} \nonumber \\
 			&= (y^n + \sigma K \bar{x}^{n}) - \left( y^n + \sigma K \bar{x}^{n} \right) \left( 1-\frac{1}{\twonorm{y^n + \sigma K \bar{x}^{n}}} \right)\nonumber \\
 			&= (y^n + \sigma K \bar{x}^{n}) -(y^n + \sigma K \bar{x}^{n}) +\frac{y^n + \sigma K \bar{x}^{n}}{\twonorm{y^n + \sigma K \bar{x}^{n}}} \nonumber \\
 			&= \frac{y^n + \sigma K \bar{x}^{n}}{\twonorm{y^n + \sigma K \bar{x}^{n}}}
 		\end{align}
 		
 	\item If $\twonorm{y^n + \sigma K \bar{x}^{n}} < 1$
+		then 
+		\begin{align}
+			1-\frac{1}{\twonorm{y^n + \sigma K \bar{x}^{n}}} < 0
+		\end{align}
+		thus we conclude 
+		\begin{align}
+			\max{\left(0, 1-\frac{1}{\twonorm{y^n + \sigma K \bar{x}^{n}}}\right)} 
+			&= 0
+		\end{align}
+		which offers us the following new identity for equation $\ref{eq:y_n_1_expression}$:
+		
+		\begin{align}
+			\prox_{\lambda F^*}(y^n + \sigma K \bar{x}^{n})
+			&= (y^n + \sigma K \bar{x}^{n}) - \left( y^n + \sigma K \bar{x}^{n} \right) \max{\left(0, 1-\frac{1}{\twonorm{y^n + \sigma K \bar{x}^{n} }}\right)} \nonumber \\
+			&= (y^n + \sigma K \bar{x}^{n}) - \left( y^n + \sigma K \bar{x}^{n} \right) 0 \nonumber \\
+			&= y^n + \sigma K \bar{x}^{n}
+		\end{align}
 \end{itemize}
+
+By using the results from the case distinction from above we can simplify equation $\ref{eq:y_n_1_expression}$ even further to:
+
+\begin{equation}
+	\prox_{\lambda F^*}(y^n + \sigma K \bar{x}^{n}) = \frac{y^n + \sigma K \bar{x}^{n}}{\max{\left(1,\twonorm{y^n + \sigma K \bar{x}^{n}} \right)}}
+\label{eq:y_p_1_we_proxy}	
+\end{equation}
+
+Finally, the only left step to do is to plug in the definition of $K$ into equation $\ref{eq:y_p_1_we_proxy}$ which gives us then the final update rule for $y_{n+1}$ when relying on the update rule from equation $\ref{eq:y_n_1_expression}$:
+
+\begin{align}
+	y_{n+1} = \frac{y^n + \sigma \nabla \bar{x}^{n}}{\max{\left(1,\twonorm{y^n + \sigma \nabla \bar{x}^{n}} \right)}}
+\end{align} 
+	
 
 \subsection{Update for $x^{n}$}
 \subsection{Update for $\bar{x}^{n}$}
