@@ -187,13 +187,88 @@ Plugging equation $\ref{eq:legendre_fenchel_transform_f}$ and the definitions in
 
 \begin{equation}
 \min_{u \in U} \max_{y \in Y} <\nabla u, y> - \delta(y) + \frac{\lambda}{2}\norm{u - g}^2_{\Omega}
+\label{eq:final_primal_dual}
 \end{equation}
 
 
-\section{Update Rules}
-\subsection{Expression for $y^{n}$}
-\subsection{Expression for $x^{n}$}
-\subsection{Expression for $\bar{x}^{n}$}
+\section{Primal-Dual steps}
+In this section I will present an iterative solver for our stated primal-dual formulation.
+
+In the following I am going to rely on an algorithm formulated by A.Chambolle and T.Pocke which allows to solve primal-formulations as ours stated in equation $\ref{eq:final_primal_dual}$.
+They stated an iterative algorithm that has the following update steps:
+
+\begin{align}
+	y^{n+1} &= \prox_{\sigma F^*}(y^n + \sigma K \bar{x}^n) \nonumber \\
+	x^{n+1} &= \prox_{\tau G}(x^n + \tau K^* y^{n+1}) \\
+	\bar{x}^{n+1} &= x^{n+1} + \theta(x^{n+1} - x^n)
+\label{eq:update_rules_plain}	
+\end{align}
+with $\theta \in (0, 1]$ and the constraint $\tau \sigma \norm{K}^2 < 1$. Note that stated constraint is important in order to guarantee convergence of their algorithm.
+
+Hereby $prox(\cdot)$ denotes the proximity operator and is defined as 
+
+\begin{equation}
+	\prox_{\lambda F}(z) = \arg \min_x \frac{1}{2} \twonorm{x - z}^2 + \lambda F(x)
+\end{equation}
+
+In the following we will derive explicit identities for the update rules in equation $\ref{eq:update_rules_plain}$that can be numerically solved. Our goal is to find an expression for the proximity operator.
+
+\subsection{Update for $y^{n+1}$}
+
+In this subsection we derive an identity for the $y^{n+1}$ update rule from equation $\ref{eq:update_rules_plain}$. The key idea is to use the so called Moreau's Identity:  
+
+\begin{equation}
+	\prox_{\lambda F^*}(z) = z - \lambda \cdot \prox_{F/ \lambda}(z / \lambda) 
+\label{eq:moreau}	
+\end{equation}
+
+Next, we apply the Moreau's identity to the proximity operator of the Legendre-Fenchel transformation.
+
+
+\begin{align}
+	\prox_{\lambda F^*}(y^n + \sigma K \bar{x}^{n}) 
+	&= (y^n + \sigma K \bar{x}^{n}) - \sigma \prox_{\frac{F}{\sigma} } \left(\frac{y^n + \sigma K \bar{x}^{n} }{\sigma} \right) \nonumber \\
+	&= (y^n + \sigma K \bar{x}^{n}) - \sigma \left( \frac{y^n + \sigma K \bar{x}^{n} }{\sigma} \max{0, 1-\frac{1}{\twonorm{y^n + \sigma K \bar{x}^{n} }}} \right) \nonumber \\
+	&= (y^n + \sigma K \bar{x}^{n}) - \left( y^n + \sigma K \bar{x}^{n} \right) \max{\left(0, 1-\frac{1}{\twonorm{y^n + \sigma K \bar{x}^{n} }}\right)}  
+\label{eq:y_n_1_expression}
+\end{align}
+
+For the first equality we use the definition of equation $\ref{eq:moreau}$ and for the second equality we used the fact (proven during class) that
+
+\begin{align}
+	\prox_{\frac{\twonorm{\cdot}}{\sigma}}(\frac{x}{\sigma}) = \frac{x}{\sigma} \max{\left(0, 1-\frac{1}{\twonorm{x}}\right)}
+\end{align}
+
+To simplify our derivation even and also get rid of the proximity operator we next make a case distinction for $\twonorm{y^n + \sigma K \bar{x}^{n}}$. 
+
+\begin{itemize}
+	\item If $\twonorm{y^n + \sigma K \bar{x}^{n}} \geq 1$
+		then  
+		\begin{align}
+			0 \leq 1-\frac{1}{\twonorm{y^n + \sigma K \bar{x}^{n}}} \leq 1
+		\end{align}
+		
+		Therefore $\frac{1}{\twonorm{y^n + \sigma K \bar{x}^{n}}}$ is smaller than one and thus
+		
+		\begin{align}
+			\max{\left(0, 1-\frac{1}{\twonorm{y^n + \sigma K \bar{x}^{n}}}\right)} 
+			&= 1-\frac{1}{\twonorm{y^n + \sigma K \bar{x}^{n}}}
+		\end{align}
+		
+		This insight can directly be used for the maximum expression in equation $\ref{eq:y_n_1_expression}$ and we hence obtain:
+		
+		\begin{align}
+			\prox_{\lambda F^*}(y^n + \sigma K \bar{x}^{n})
+			&= (y^n + \sigma K \bar{x}^{n}) - \left( y^n + \sigma K \bar{x}^{n} \right) \left( 1-\frac{1}{\twonorm{y^n + \sigma K \bar{x}^{n}}} \right)\nonumber \\
+			&= (y^n + \sigma K \bar{x}^{n}) -(y^n + \sigma K \bar{x}^{n}) +\frac{y^n + \sigma K \bar{x}^{n}}{\twonorm{y^n + \sigma K \bar{x}^{n}}} \nonumber \\
+			&= \frac{y^n + \sigma K \bar{x}^{n}}{\twonorm{y^n + \sigma K \bar{x}^{n}}}
+		\end{align}
+		
+	\item If $\twonorm{y^n + \sigma K \bar{x}^{n}} < 1$
+\end{itemize}
+
+\subsection{Update for $x^{n}$}
+\subsection{Update for $\bar{x}^{n}$}
 
 \section{Implementation}
 % mention why there is no minus sign in the div operator for discrete case
