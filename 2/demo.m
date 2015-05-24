@@ -7,12 +7,13 @@ clear all;
 close all;
 clc;
 
-iter = 1000;
+iter = 1000 % 400;
 FIND_OPTIMUM = false;
+verbose = true;
 im = imread('Input/fruits.png');
 %im = imresize(im,2);
 %im = imread('Input/woodensweater.jpg');
-im = imresize(im,0.5);
+%im = imresize(im,0.5);
 [m,n,~] = size(im);
 im = im2double(im);
 input = im;
@@ -41,14 +42,12 @@ if FIND_OPTIMUM
     disp('determined best lambda value');
 else
     % determined using findBestLambda(...)
-    % for Input/fruits.png at 200x266 pixels
-    % bestLambda = 1899;  % 1740 for big
-    bestLambda = 1000; 
-    % bestLambda = 596; % best lamdba for the sweatshirt dataset
+    % for Input/fruits.png at 100x133 pixels
+    % bestLambda = 1000; default value
+    bestLambda = 2105; % found by running find best lambda script
 end
 
 %% compute demosaiced img
-verbose = false;
 demosaicedImg = demosaicing_michael_single(mosaiced, Omega, bestLambda, iter, input, verbose);
 
 %% display results
