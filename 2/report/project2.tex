@@ -199,7 +199,7 @@ They stated an iterative algorithm that has the following update steps:
 
 \begin{align}
 	y^{n+1} &= \prox_{\sigma F^*}(y^n + \sigma K \bar{x}^n) \nonumber \\
-	x^{n+1} &= \prox_{\tau G}(x^n + \tau K^* y^{n+1}) \\
+	x^{n+1} &= \prox_{\tau G}(x^n - \tau K^* y^{n+1}) \\
 	\bar{x}^{n+1} &= x^{n+1} + \theta(x^{n+1} - x^n)
 \label{eq:update_rules_plain}	
 \end{align}
@@ -299,8 +299,61 @@ Finally, the only left step to do is to plug in the definition of $K$ into equat
 \end{align} 
 	
 
-\subsection{Update for $x^{n}$}
-\subsection{Update for $\bar{x}^{n}$}
+\subsection{Update for $x^{n+1}$}
+
+\begin{align}
+x^{n+1} &= \prox_{\tau G}(x^n - \tau K^* y^{n+1}) \\
+		&= \prox_{\tau \frac{\lambda}{2} \norm{u - g}_{\Omega}^2 }(x^n - \tau \nabla^* y^{n+1}) \\
+	    &= \arg \min_{z} \frac{1}{2} \twonorm{\left(x^n - \tau \nabla^* y^{n+1} \right) - z}^2 + \tau \frac{\lambda}{2}\norm{z - g}_{\Omega}^2 \\
+	    &= \arg \min_{z} E(z)
+\label{eq:energy_x_p_1}	    
+\end{align}
+
+To simplify the following derivations, let us define the following substitution: 
+\begin{align}
+	m := \left(x^n - \tau \nabla^* y^{n+1} \right)
+\end{align}
+
+We can solve for $x^{n+1}$ by finding the zeros of the partial derivative of $E(z)$ from equation $\ref{eq:energy_x_p_1}$. Let us start with the partial derivative along $z$ of $E(z)$ from equation $\ref{eq:energy_x_p_1}$: 
+
+\begin{align}
+	\partial_{z} E(z)
+	&= \partial_{z} \left( \frac{1}{2} \twonorm{m - z}^2 + \tau \frac{\lambda}{2}\norm{z - g}_{\Omega}^2 \right) \nonumber \\
+	&= \frac{1}{2} \partial_{z} \left[ \left( m - z \right)^{T}\left( m - z \right) + \tau \lambda \Omega \left( z -g \right)^{T}\left( z -g \right) \right] \nonumber \\
+	&= \frac{1}{2} \partial_{z} \left[ m^{T}m -2m^{T} z + z^{T} z + \tau \lambda \Omega \left( z^{T}z -2z^{T} g + g^{T} g\right) \right] \nonumber \\
+	&= \frac{1}{2} \left[ -2m + 2z + \tau \lambda \Omega \left( 2 z -2g \right) \right] \nonumber \\
+	&= \left[ -m + z + \tau \lambda \Omega z - \tau \lambda \Omega g \right]	 \nonumber \\	
+	&= \left[ \left(1+\tau \lambda \Omega \right)z-m - \tau \lambda \Omega g \right]	 \nonumber \\
+\label{eq:derivative_x_n_p_1}		
+\end{align}
+
+Next, let us set the finding from equation $\ref{eq:derivative_x_n_p_1}$ to zero and solve for $z$:
+
+\begin{align}
+	\partial_{z} E(z) 
+	&= 0 \nonumber \\
+	&\Leftrightarrow \left(1+\tau \lambda \Omega \right)z-m - \tau \lambda \Omega g = 0 \nonumber \\
+	&\Rightarrow z = \left(m +  \tau \lambda \Omega g \right) \left( 1+\tau \lambda \Omega\right)^{-1} \nonumber \\
+	&\Rightarrow z = \frac{m +  \tau \lambda \Omega g}{1+\tau \lambda \Omega} \nonumber \\
+\label{eq:zeros_ez}	
+\end{align}
+
+Note that the division $(1+\tau \lambda \Omega)$ denotes a component-wise division, since $\Omega$ is applied component-wise to the elements of $g$. In addition, 1 and $\Omega$ are representing matrices here (of same dimension as $g$ and $z$ ($u$ respectively).
+
+By plugging the definition $m$ into equation $\ref{eq:zeros_ez}$ and using the fact, that $z$ corresponds to $x^{n+1}$ we can conclude:
+
+\begin{align}
+	x^{n+1} 
+	&= \frac{x^n - \tau \nabla^* y^{n+1} +  \tau \lambda \Omega g}{1+\tau \lambda \Omega} \nonumber \\
+	&= \frac{x^n + \tau div(y^{n+1}) +  \tau \lambda \Omega g}{1+\tau \lambda \Omega}
+\end{align}
+
+In the last step we used the well known fact, that 
+\begin{align}
+	\nabla^* (\cdot) = -div(\cdot)
+\end{align}
+
+\subsection{Update for $\bar{x}^{n+1}$}
 
 \section{Implementation}
 % mention why there is no minus sign in the div operator for discrete case
