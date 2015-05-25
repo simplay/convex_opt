@@ -20,7 +20,7 @@ function [demosaicedImg] = demosaicing_michael_single(mosaiced, Omega, lambda, i
 % @param iterations [Integer] number of iterations
 % @return demosaicedImg M x N x 3 Color Image.
 
-    eps = 1e-4;
+    eps = 1e-6;
 
     % parameter
     K_a = sqrt(4);
@@ -67,7 +67,8 @@ function [demosaicedImg] = demosaicing_michael_single(mosaiced, Omega, lambda, i
        
        E_u_R = energy_term_for(Rx_tilde_n, mosaiced(:,:,1), Omega(:,:,1), lambda);
        if verbose
-           plot(i,log(norm(E_u_R(:)-E_u_R_prev(:))+eps),'.');
+           %plot(i,log(norm(E_u_R(:)-E_u_R_prev(:))+eps),'.');
+           plot(i,norm(E_u_R(:)),'.');
            hold on;
            %imagesc(Rx_n);
            drawnow
@@ -82,7 +83,7 @@ function E_u = energy_term_for(u, g, omega, lambda)
     similarity = (u-g).*omega;
     smoothness = grad_of(u, 'fwd');
     l2 = @(f) sqrt(f(:,:,1).^2 + f(:,:,2).^2);
-    E_u = (lambda*0.5)*norm(similarity(:)) + l2(smoothness);
+    E_u = (lambda*0.5)*norm(similarity(:)).^2 + l2(smoothness);
 end
 
 function [y_n_p_1, x_n_p_1, x_tilde_n_p_1] = primal_dual_solver(y_n, x_n, x_tilde_n, g, Omega, lambda, tau, sigma, theta)

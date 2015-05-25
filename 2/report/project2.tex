@@ -416,13 +416,13 @@ Initially, I used the following parameter setting:
 
 With $\sqrt{\norm{K}} = \sqrt{4}$, a strong upper bound for the function $K$\footnote{For further information about this upper bound please have a look at Chambolle, Antonin: An algorithm for total variation minimisation and application. In Journal of Mathematical imaging and vision 20, 2004.}.
 
-For consistency, a named all functions in my Matlab code the same as in this report.
+For consistency, a named all functions in my Matlab code the same as in this report. Furthermore I used a fixed number of iterations for computing my iterative demosaiced images.
 
 the final algorithms I have to perform is the following:
 
 For each color-channel $C \in \{R,G,B\}$ Do: Loop until $\norm{\bar{x}^{n+1} - \bar{x}^{n}}$ is small enough do: use parameter setup as defined in equation $\ref{eq:parameter_set_up}$ and then solve the update rules from euqation $\ref{eq:final_update_rules_plain}$. Finally, merge all color iterative color channel solutions to a color image.
 
-One last note: When computing the gradient and divergence finite approximation schemes, I used a zero padding boundary condition. Since I also tried out this kind of boundary condition in the first report, comparing the results produced in this project which those from the first project is valid.
+When computing the gradient and divergence finite approximation schemes, I used a zero padding boundary condition. Since I also tried out this kind of boundary condition in the first report, comparing the results produced in this project which those from the first project is valid.
 
 One last comment: From the definition of the update rules, we see that the value of $\lambda$ directly affects the parameters $\tau$ and $\sigma$. Thus, when changing the value of $\lambda$ we also would have to find new best $\tau$ and $\sigma$ parameters. Hence, changing $\lambda$ also affects the convergence behaviour of the primal dual method. 
 
@@ -495,14 +495,49 @@ One last comment: From the definition of the update rules, we see that the value
 \label{fig:varying_lambdas}
 \end{figure}
 
+\begin{figure}[H]
+\begin{center}
+  \subfigure[SSD vs Lambda Plot]{
+   \includegraphics[width=1.0\linewidth] {figures/ssd_vs_lambda}
+   \label{fig:500_iters}
+ }
+\end{center}
+\caption{Plotting the SSD vs $\lambda$ for the fruits mosaiced image.}
+\label{fig:ssd_vs_lambda}
+\end{figure}
+
+Numerically, I determined the value $\lambda = 2105$ as the best $\lambda$ value.
 
 
+We also can plot the energy term vs number of iteration plots shown in figure $\ref{fig:energy_vs_iterations}$. We observe that after 400 - 500 iterations we are within a error range of zero using the optimal value 
 
+\begin{figure}[H]
+\begin{center}
+  \subfigure[Energy vs Iterations Plot]{
+   \includegraphics[width=1.0\linewidth] {figures/energy_term}
+   \label{fig:500_iters}
+ }
+\end{center}
+\caption{Plotting the Energy vs number of iterations plot for the fruits mosaiced image.}
+\label{fig:energy_vs_iterations}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+  \subfigure[Log difference Energy vs Iterations Plot]{
+   \includegraphics[width=1.0\linewidth] {figures/log_diff_energy_term}
+   \label{fig:500_iters}
+ }
+\end{center}
+\caption{Plotting the Energy difference (current energy term minus previous computed Energy) vs number of iterations plot for the fruits mosaiced image of red color channel. Note that I transformed the errror into a log space (by applying the log).}
+\label{fig:log_diff_energy_vs_iterations}
+\end{figure}
 
 % display 
 \section{Conclusion}
 % compare the two methods: gradient descent vs primal dual
 % in terms of performance and computational time
+% find correct parameter setup is rather hard
 
 \end{document}
 

@@ -9,7 +9,7 @@ clc;
 
 iter = 1000; % 400;
 FIND_OPTIMUM = false;
-verbose = false;
+verbose = true;
 im = imread('Input/fruits.png');
 %im = imresize(im,2);
 %im = imread('Input/woodensweater.jpg');
@@ -44,11 +44,12 @@ else
     % determined using findBestLambda(...)
     % for Input/fruits.png at 100x133 pixels
     bestLambda = 1; %default value
-    %bestLambda = 2105; % found by running find best lambda script
+    bestLambda = 2105; % found by running find best lambda script
 end
 
 %% compute demosaiced img
 demosaicedImg = demosaicing_michael_single(mosaiced, Omega, bestLambda, iter, input, verbose);
+
 
 %% display results
 figure;
