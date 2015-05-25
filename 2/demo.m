@@ -7,9 +7,9 @@ clear all;
 close all;
 clc;
 
-iter = 1000 % 400;
+iter = 1000; % 400;
 FIND_OPTIMUM = false;
-verbose = true;
+verbose = false;
 im = imread('Input/fruits.png');
 %im = imresize(im,2);
 %im = imread('Input/woodensweater.jpg');
@@ -43,8 +43,8 @@ if FIND_OPTIMUM
 else
     % determined using findBestLambda(...)
     % for Input/fruits.png at 100x133 pixels
-    % bestLambda = 1000; default value
-    bestLambda = 2105; % found by running find best lambda script
+    bestLambda = 1; %default value
+    %bestLambda = 2105; % found by running find best lambda script
 end
 
 %% compute demosaiced img

@@ -390,6 +390,20 @@ I initialized $x_n$ with the mosaiced image $g$, $y^{n}$ with a zeros \footnote{
 
 For computing $\nabla$ I used a forward difference approximation scheme. For computing the divergence operator of the vector-field $y^{n+1}$ I used backward difference approximation scheme. The reason for using a backward difference using a backward difference is to shift back gradients (remember, the divergence is applied to $y^{n+1}$ which is the result of a forward difference. Otherwise, when not altering between a forward-and backward difference we would end up with shifted gradients.
 
+For computing the divergence, I relied on its mathematical definition. For a given vector-field $v = (v_x, v_y)$ the divergence is defined as the following:
+
+\begin{align}
+	div(v) = \partial_x v_x + \partial_y v_y
+\end{align}
+
+Since in our case we have $v = y^{n+1}$ and $y^{n+1}$ a vector valued function of the form $y^{n+1} = (y_{x}^{n+1}, (y_{y}^{n+1})$ it follows:
+
+\begin{align}
+	div(y^{n+1}) 
+	&= div((y_{x}^{n+1}) + div((y_{y}^{n+1}) \\
+	&= \left( \partial_x y_{x}^{n+1} + \partial_y y_{x}^{n+1} \right) + \left( \partial_x y_{y}^{n+1} + \partial_y y_{y}^{n+1} \right)
+\end{align}
+
 Initially, I used the following parameter setting:
 
 \begin{align}
@@ -408,7 +422,83 @@ the final algorithms I have to perform is the following:
 
 For each color-channel $C \in \{R,G,B\}$ Do: Loop until $\norm{\bar{x}^{n+1} - \bar{x}^{n}}$ is small enough do: use parameter setup as defined in equation $\ref{eq:parameter_set_up}$ and then solve the update rules from euqation $\ref{eq:final_update_rules_plain}$. Finally, merge all color iterative color channel solutions to a color image.
 
+One last note: When computing the gradient and divergence finite approximation schemes, I used a zero padding boundary condition. Since I also tried out this kind of boundary condition in the first report, comparing the results produced in this project which those from the first project is valid.
+
+One last comment: From the definition of the update rules, we see that the value of $\lambda$ directly affects the parameters $\tau$ and $\sigma$. Thus, when changing the value of $\lambda$ we also would have to find new best $\tau$ and $\sigma$ parameters. Hence, changing $\lambda$ also affects the convergence behaviour of the primal dual method. 
+
 \section{Results}
+
+
+
+
+
+
+
+\begin{figure}[H]
+\begin{center}
+  \subfigure[Mosaiced Input]{
+   \includegraphics[width=0.47\linewidth] {figures/input}
+   \label{fig:input_iters}
+ }
+ \subfigure[Demosaiced Output (5k Iterations)]{
+   \includegraphics[width=0.47\linewidth] {figures/iters/output_5k}
+   \label{fig:output_iters}
+ }
+ ~
+  \subfigure[500 Iterations]{
+   \includegraphics[width=0.30\linewidth] {figures/iters/500}
+   \label{fig:500_iters}
+ }
+ \subfigure[250 Iterations]{
+   \includegraphics[width=0.30\linewidth] {figures/iters/250}
+   \label{fig:250_iters}
+ }
+ \subfigure[100 Iterations]{
+   \includegraphics[width=0.30\linewidth] {figures/iters/100}
+   \label{fig:100_iters}
+ } 
+\end{center}
+\caption{Demosaiced image using the $\lambda=1000$ and different number of iterations. We observe that when only using 500 iteration we obtain a persuading demosaiced result image.}
+\label{fig:varying_iters}
+\end{figure}
+
+
+\begin{figure}[H]
+\begin{center}
+  \subfigure[$\lambda=1000$]{
+   \includegraphics[width=0.30\linewidth] {figures/lambdas/1000}
+   \label{fig:500_iters}
+ }
+ \subfigure[$\lambda=100$]{
+   \includegraphics[width=0.30\linewidth] {figures/lambdas/100}
+   \label{fig:250_iters}
+ }
+ \subfigure[$\lambda=10$]{
+   \includegraphics[width=0.30\linewidth] {figures/lambdas/10}
+   \label{fig:100_iters}
+ }
+  ~
+  \subfigure[$\lambda=5$]{
+   \includegraphics[width=0.30\linewidth] {figures/lambdas/5}
+   \label{fig:500_iters}
+ }
+ \subfigure[$\lambda=2$]{
+   \includegraphics[width=0.30\linewidth] {figures/lambdas/2}
+   \label{fig:250_iters}
+ }
+ \subfigure[$\lambda=1$]{
+   \includegraphics[width=0.30\linewidth] {figures/lambdas/1}
+   \label{fig:100_iters}
+ }  
+\end{center}
+\caption{Demosaiced image using 1000 iterations and varying values for $\lambda$. We observe that the smaller $\lambda$ gets, the blurrier the result becomes and also that smaller $\lambda$ affect the convergence of the result in a way that it is less converted (i.e. would require more iterations).}
+\label{fig:varying_lambdas}
+\end{figure}
+
+
+
+
+
 % display 
 \section{Conclusion}
 % compare the two methods: gradient descent vs primal dual
