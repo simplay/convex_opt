@@ -381,7 +381,7 @@ In the previous section we have defined explicit update rules. Aggregating all f
 
 \begin{align}
 	y^{n+1} &= \frac{y^n + \sigma \nabla \bar{x}^{n}}{\max{\left(1,\twonorm{y^n + \sigma \nabla \bar{x}^{n}} \right)}} \nonumber \\
-	x^{n+1} &= \frac{x^n + \tau div(y^{n+1}) -  \tau \lambda \Omega g}{1+\tau \lambda \Omega} \\
+	x^{n+1} &= \frac{x^n - \tau div(y^{n+1}) +  \tau \lambda \Omega g}{1+\tau \lambda \Omega} \\
 	\bar{x}^{n+1} &= x^{n+1} + \theta(x^{n+1} - x^n)
 \label{eq:final_update_rules_plain}	
 \end{align}
