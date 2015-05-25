@@ -296,8 +296,8 @@ Finally, the only left step to do is to plug in the definition of $K$ into equat
 
 \begin{align}
 	y_{n+1} = \frac{y^n + \sigma \nabla \bar{x}^{n}}{\max{\left(1,\twonorm{y^n + \sigma \nabla \bar{x}^{n}} \right)}}
-\end{align} 
-	
+\label{eq:update_rule_y_n_p_1}	
+\end{align} 	
 
 \subsection{Update for $x^{n+1}$}
 
@@ -346,24 +346,70 @@ By plugging the definition $m$ into equation $\ref{eq:zeros_ez}$ and using the f
 	x^{n+1} 
 	&= \frac{x^n - \tau \nabla^* y^{n+1} +  \tau \lambda \Omega g}{1+\tau \lambda \Omega} \nonumber \\
 	&= \frac{x^n + \tau div(y^{n+1}) +  \tau \lambda \Omega g}{1+\tau \lambda \Omega}
+\label{eq:update_x_n_p_1}	
 \end{align}
 
 In the last step we used the well known fact, that 
 \begin{align}
-	\nabla^* (\cdot) = -div(\cdot)
+	\nabla^* (v) = -div(v)
 \end{align}
 
-\subsection{Update for $\bar{x}^{n+1}$}
+for any vectorfield $v$ of the form 
+
+\begin{align}
+	v = \nabla u
+\end{align}
+
+In the next section I explain how I used the derived update rules in my actual implementation and what parameter values I have used. 
 
 \section{Implementation}
-% mention why there is no minus sign in the div operator for discrete case
-% mention grad foreward difference, divergence operator backward difference 
-% otherwise we observe shifted gradients
+
+In this section I how I have actually Implemented the so far described dual-primal solver for demosaicing a raw image.
+
+One important note in advance. In the discrete case, the following holds true 
+
+\begin{align}
+	\nabla^* (y^{n+1}) 
+	&= \nabla^{T} (y^{n+1}) \nonumber \\
+	&= div(y^{n+1})
+\end{align}
+
+So we have to omit a minus one factor. This affects the update rule for $x^{n+1}$ derived previously.
+
+In the previous section we have defined explicit update rules. Aggregating all finding, mainly those from equation $\ref{eq:update_x_n_p_1}$ and $\ref{eq:update_rule_y_n_p_1}$, and plugging them into equation $\ref{eq:update_rules_plain}$ we get our update rules
+
+
+\begin{align}
+	y^{n+1} &= \frac{y^n + \sigma \nabla \bar{x}^{n}}{\max{\left(1,\twonorm{y^n + \sigma \nabla \bar{x}^{n}} \right)}} \nonumber \\
+	x^{n+1} &= \frac{x^n + \tau div(y^{n+1}) -  \tau \lambda \Omega g}{1+\tau \lambda \Omega} \\
+	\bar{x}^{n+1} &= x^{n+1} + \theta(x^{n+1} - x^n)
+\label{eq:final_update_rules_plain}	
+\end{align}
+
+I initialized $x_n$ with the mosaiced image $g$, $y^{n}$ with a zeros \footnote{a tensor of dimension $M \times N \times 2$ filled with zeros, where $(M \times N)$ denotes the dimension of one color channel of $g$.} and $\bar{x}^{n}$ also with the mosaiced image $g$.
+
+For computing $\nabla$ I used a forward difference approximation scheme. For computing the divergence operator of the vector-field $y^{n+1}$ I used backward difference approximation scheme. The reason for using a backward difference using a backward difference is to shift back gradients (remember, the divergence is applied to $y^{n+1}$ which is the result of a forward difference. Otherwise, when not altering between a forward-and backward difference we would end up with shifted gradients.
+
+Initially, I used the following parameter setting:
+
+\begin{align}
+	\lambda &= 1000 \\
+	\theta &= 0.5 \\
+	\tau &= 2*10^{-3} \\
+	\sigma &= \frac{1}{\tau * \sqrt{\norm{K}}}
+\label{eq:parameter_set_up}	
+\end{align}
+
+With $\sqrt{\norm{K}} = \sqrt{4}$, a strong upper bound for the function $K$\footnote{For further information about this upper bound please have a look at Chambolle, Antonin: An algorithm for total variation minimisation and application. In Journal of Mathematical imaging and vision 20, 2004.}.
+
+For consistency, a named all functions in my Matlab code the same as in this report.
+
+the final algorithms I have to perform is the following:
+
+For each color-channel $C \in \{R,G,B\}$ Do: Loop until $\norm{\bar{x}^{n+1} - \bar{x}^{n}}$ is small enough do: use parameter setup as defined in equation $\ref{eq:parameter_set_up}$ and then solve the update rules from euqation $\ref{eq:final_update_rules_plain}$. Finally, merge all color iterative color channel solutions to a color image.
 
 \section{Results}
 % display 
-\subsection{Parameter values}
-\subsection{Optimal $\lambda$}
 \section{Conclusion}
 % compare the two methods: gradient descent vs primal dual
 % in terms of performance and computational time
