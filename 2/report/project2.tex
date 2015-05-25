@@ -428,11 +428,10 @@ One last comment: From the definition of the update rules, we see that the value
 
 \section{Results}
 
+In this section I present my generated results using my primal-dual implementation for solving the demosaicing problem.
+In the following I used the parameter setup as specified in equation $\ref{eq:parameter_set_up}	$ except when I mention that I used different assignments.
 
-
-
-
-
+First, I examined how different numbers of iterations affect the result (i.e. how much is the results converged) for a fixed $\lambda$. Generated results are shown in figure $\ref{fig:varying_iters}$. We observe that after only 500 iterations we visually already reach a pleasant demosaiced image. However, when only using 250 or fewer iterations, we observe not-yet converged results. Note that for reference I generated the so called output image that was computed by using 5000 iterations.
 
 \begin{figure}[H]
 \begin{center}
@@ -462,6 +461,7 @@ One last comment: From the definition of the update rules, we see that the value
 \label{fig:varying_iters}
 \end{figure}
 
+Next, I experimented with the parameter $\lambda$. I was asking myself what happens when I use a fixed number of iterations and a varying parameter $\lambda$. Results are shown in figure $\ref{fig:varying_lambdas}$. For generating these results, I used 1000 iterations for each demosaiced image. Having a closer look at the produced demosaiced images, we can observe to main findings. First, the lower $\lambda$ gets, the blurrier the result becomes. And and second: Lower values of $\lambda$ affect the results in a way that they are less converged. Both finding actually make sense. The blurriness result for lower $\lambda$ values can be understood when we ask ourself the following question: \emph{on what optimization term is $\lambda$ applied to}? And we see then, that $\lambda$ is multiplied onto the energy term that regularizes the blurriness. Please refer for further insight to the report of the first project. The same reasoning I used there can be applied here. For too small $\lambda$ values we have no convergence anymore. For large enough lambda values there is convergence and also no blur noticeable. Large enough means about $\lambda = 100$.
 
 \begin{figure}[H]
 \begin{center}
@@ -495,6 +495,10 @@ One last comment: From the definition of the update rules, we see that the value
 \label{fig:varying_lambdas}
 \end{figure}
 
+The idea how I determined the best $\lambda$ is rather simple: For a fixed number of iterations$\footnote{I used 100 Iterations. I assume that the best determined value for a small number of iterations is also the best $\lambda$ value for a large number of iterations. }$, I run my primal dual solver several times for different $\lambda$ values. For each intermediate result, I computed the SSD between the currently computed demosaiced image and the ground truth image. As we notice this is actually the same approach as I used in the first project. In addition I initially fixed the parameters $\tau$, $\sigma$ and $\theta$ (as described in the implementation section).
+
+The results of the ssd vs lambda plots for the mosaiced fruits iamge are shown in figure $\ref{fig:ssd_vs_lambda}$. 
+
 \begin{figure}[H]
 \begin{center}
   \subfigure[SSD vs Lambda Plot]{
@@ -508,8 +512,7 @@ One last comment: From the definition of the update rules, we see that the value
 
 Numerically, I determined the value $\lambda = 2105$ as the best $\lambda$ value.
 
-
-We also can plot the energy term vs number of iteration plots shown in figure $\ref{fig:energy_vs_iterations}$. We observe that after 400 - 500 iterations we are within a error range of zero using the optimal value 
+Last, I have also generated a plot for the energy term vs number of iteration. This plot is illustrated in figure $\ref{fig:energy_vs_iterations}$. We observe that after 400 - 500 iterations we are within a error range of zero using the optimal value. In addition I have also plotted the log diff plot of the energy terms shown in figure $\ref{fig:log_diff_energy_vs_iterations}$. This Plot shows the difference between the current energy and the previously computed energy in a log scale. From these plots we can conclude that we usually have to expect to run about 400-500 iterations until we have a good convergence.
 
 \begin{figure}[H]
 \begin{center}
