@@ -552,9 +552,17 @@ Last, a result produced when using all best parameter values and a minimal numbe
 
 % display 
 \section{Conclusion}
-% compare the two methods: gradient descent vs primal dual
-% in terms of performance and computational time
-% find correct parameter setup is rather hard
+
+The the computational cost of one step in the primal-dual solver is larger than one in the gradient descent method. Reason: Both solvers use inputs of the same dimensionality, however, the primal-dual solver computes several times the gradient of its values (gradient on x, divergence (which is again the gradient) on y). In the gradient descent solver we usually compute once per iteration a gradient. But the primal dual solver requires way fewer iterations than the gradient descent. When using the best lambda values in both solvers, I needed about 400 iterations to get a converged results using my primal dual solver and about 1000 to 2000 iterations when I use my gradient descent method. 
+
+The primal dual solver has way more parameters that have to be specified by the user: actually, there is $\lambda$, $\theta$, $\simga$, $\thau$ and in the gradient descent solver we only have $\lambda$ and $\alpha$. It is harder to find appropriate parameters for the primal-dual solver. Furthermore, the primal-dual solver is very sensitive to changing parameter setting and may result in diverging results easily when changing lambda. It also takes a lot of time to find good parameter setting for the primal dual solver compared to the gradient descent solver. 
+
+Another point of view is the required mathematical background in oder to develop a particular solver approach. The mathematical basis for formulating a prima-dual solver is way more sophisticated than defining a primal dual solver.
+
+Therefore we conclude: The gradient descent method is simpler to understand, faster but requires a lot of iterations to converges. The primal-dual solver on the other hand is hard to understand, very sensitive to its parameters, computational expensive per iteration, but usually requires fewer iterations.
+
+Lest a little comparison of the results produced by both solvers using their optimal values and parameter settings. The results are shown in figure $FIGURE$. This comparison directly confirms our conclusion.
+
 
 \end{document}
 
