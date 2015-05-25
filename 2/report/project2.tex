@@ -510,7 +510,7 @@ The results of the ssd vs lambda plots for the mosaiced fruits iamge are shown i
 \label{fig:ssd_vs_lambda}
 \end{figure}
 
-Numerically, I determined the value $\lambda = 2105$ as the best $\lambda$ value.
+Although, the SSD error is already very small for lambda values about 200,  numerically, I determined the value $\lambda = 2105$ as the best $\lambda$ value. The reason for this is that the SSD as a function of lambda is still decreasing for larger values of lambda equal 200 (but indeed very slowly). 
 
 Last, I have also generated a plot for the energy term vs number of iteration. This plot is illustrated in figure $\ref{fig:energy_vs_iterations}$. We observe that after 400 - 500 iterations we are within a error range of zero using the optimal value. In addition I have also plotted the log diff plot of the energy terms shown in figure $\ref{fig:log_diff_energy_vs_iterations}$. This Plot shows the difference between the current energy and the previously computed energy in a log scale. From these plots we can conclude that we usually have to expect to run about 400-500 iterations until we have a good convergence.
 
@@ -535,6 +535,20 @@ Last, I have also generated a plot for the energy term vs number of iteration. T
 \caption{Plotting the Energy difference (current energy term minus previous computed Energy) vs number of iterations plot for the fruits mosaiced image of red color channel. Note that I transformed the errror into a log space (by applying the log).}
 \label{fig:log_diff_energy_vs_iterations}
 \end{figure}
+
+Last, a result produced when using all best parameter values and a minimal number of iterations. The result is shown in figure $\ref{fig:best_results}$. When only using 450 iterations and the best lambda value equal 2105 I get a good looking demosaiced result.
+
+\begin{figure}[H]
+\begin{center}
+  \subfigure[Mosaiced, Demosaiced and intermediate results]{
+   \includegraphics[width=1.0\linewidth] {figures/best}
+   \label{fig:500_iters}
+ }
+\end{center}
+\caption{Mosaiced image (left, top), and its demosaiced version (bottom left) using the best lambda value and only 450 iterations. On the right top, the SSD image and on bottom right the ground truth image}
+\label{fig:best_results}
+\end{figure}
+
 
 % display 
 \section{Conclusion}

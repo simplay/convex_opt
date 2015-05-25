@@ -7,7 +7,7 @@ clear all;
 close all;
 clc;
 
-iter = 1000; % 400;
+iter = 450; % 400;
 FIND_OPTIMUM = false;
 verbose = true;
 im = imread('Input/fruits.png');
