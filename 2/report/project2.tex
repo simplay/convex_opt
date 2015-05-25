@@ -354,7 +354,7 @@ In the last step we used the well known fact, that
 	\nabla^* (v) = -div(v)
 \end{align}
 
-for any vectorfield $v$ of the form 
+for any vector-field $v$ of the form 
 
 \begin{align}
 	v = \nabla u
@@ -420,7 +420,7 @@ For consistency, a named all functions in my Matlab code the same as in this rep
 
 the final algorithms I have to perform is the following:
 
-For each color-channel $C \in \{R,G,B\}$ Do: Loop until $\norm{\bar{x}^{n+1} - \bar{x}^{n}}$ is small enough do: use parameter setup as defined in equation $\ref{eq:parameter_set_up}$ and then solve the update rules from euqation $\ref{eq:final_update_rules_plain}$. Finally, merge all color iterative color channel solutions to a color image.
+For each color-channel $C \in \{R,G,B\}$ Do: Loop until $\norm{\bar{x}^{n+1} - \bar{x}^{n}}$ is small enough do: use parameter setup as defined in equation $\ref{eq:parameter_set_up}$ and then solve the update rules from equation $\ref{eq:final_update_rules_plain}$. Finally, merge all color iterative color channel solutions to a color image.
 
 When computing the gradient and divergence finite approximation schemes, I used a zero padding boundary condition. Since I also tried out this kind of boundary condition in the first report, comparing the results produced in this project which those from the first project is valid.
 
@@ -532,7 +532,7 @@ Last, I have also generated a plot for the energy term vs number of iteration. T
    \label{fig:500_iters}
  }
 \end{center}
-\caption{Plotting the Energy difference (current energy term minus previous computed Energy) vs number of iterations plot for the fruits mosaiced image of red color channel. Note that I transformed the errror into a log space (by applying the log).}
+\caption{Plotting the Energy difference (current energy term minus previous computed Energy) vs number of iterations plot for the fruits mosaiced image of red color channel. Note that I transformed the error into a log space (by applying the log).}
 \label{fig:log_diff_energy_vs_iterations}
 \end{figure}
 
@@ -553,16 +553,34 @@ Last, a result produced when using all best parameter values and a minimal numbe
 % display 
 \section{Conclusion}
 
+In this report we have seen a derivation to solve the demosaicing problem using a primal-dual solver. We also explored the parameter space of that solver and how it converges. Last we compare the prima-dual solver against the gradient descent solver.
+
 The the computational cost of one step in the primal-dual solver is larger than one in the gradient descent method. Reason: Both solvers use inputs of the same dimensionality, however, the primal-dual solver computes several times the gradient of its values (gradient on x, divergence (which is again the gradient) on y). In the gradient descent solver we usually compute once per iteration a gradient. But the primal dual solver requires way fewer iterations than the gradient descent. When using the best lambda values in both solvers, I needed about 400 iterations to get a converged results using my primal dual solver and about 1000 to 2000 iterations when I use my gradient descent method. 
 
-The primal dual solver has way more parameters that have to be specified by the user: actually, there is $\lambda$, $\theta$, $\simga$, $\thau$ and in the gradient descent solver we only have $\lambda$ and $\alpha$. It is harder to find appropriate parameters for the primal-dual solver. Furthermore, the primal-dual solver is very sensitive to changing parameter setting and may result in diverging results easily when changing lambda. It also takes a lot of time to find good parameter setting for the primal dual solver compared to the gradient descent solver. 
+The primal dual solver has way more parameters that have to be specified by the user: actually, there is $\lambda$, $\theta$, $\sigma$, $\tau$ and in the gradient descent solver we only have $\lambda$ and $\alpha$. It is harder to find appropriate parameters for the primal-dual solver. Furthermore, the primal-dual solver is very sensitive to changing parameter setting and may result in diverging results easily when changing lambda. It also takes a lot of time to find good parameter setting for the primal dual solver compared to the gradient descent solver. 
 
 Another point of view is the required mathematical background in oder to develop a particular solver approach. The mathematical basis for formulating a prima-dual solver is way more sophisticated than defining a primal dual solver.
 
 Therefore we conclude: The gradient descent method is simpler to understand, faster but requires a lot of iterations to converges. The primal-dual solver on the other hand is hard to understand, very sensitive to its parameters, computational expensive per iteration, but usually requires fewer iterations.
 
-Lest a little comparison of the results produced by both solvers using their optimal values and parameter settings. The results are shown in figure $FIGURE$. This comparison directly confirms our conclusion.
+Lest a little comparison of the results produced by both solvers using their optimal values and parameter settings. The results are shown in figure $\ref{fig:best_comp}$. This comparison directly confirms our conclusion.
 
+\begin{figure}[H]
+\begin{center}
+  \subfigure[Gradient Descent]{
+   \includegraphics[width=0.8\linewidth] {figures/comp/fruits_l1740i1000Big}
+   \label{fig:gd}
+ }
+  \subfigure[Primal-Dual]{
+   \includegraphics[width=0.95\linewidth] {figures/comp/primal_dual}
+   \label{fig:pd}
+ }
+\end{center}
+\caption{Direct companions between the best result produced by the gradient descent solver and the primal-dual solver. I used 400 iterations for the prima-dual, and 1000 for the gradient descent method. The bluish border in the primal dual result can be ignored since this us a result of the zero padding. The same border effect appears when we use a zero padding boundary condition for the gradient solver. I simply have not adapted the code to have a symmetric boundary condition in the primal dual solver.}
+\label{fig:best_comp}
+\end{figure}
+
+Last, The primal-dual approach also becomes hard to address for operators with unknown norms.
 
 \end{document}
 
